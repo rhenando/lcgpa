@@ -7,58 +7,70 @@ import HeroTrendingBar from "./HeroTrendingBar";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/firebase/config";
 
+// --- UPDATED SLIDES WITH MORE RELEVANT UNSPLASH IMAGES ---
+// These images from Unsplash are chosen to be more specific to Saudi Arabia's landscape.
 const leftSlides = [
   {
     title: {
-      en: "From Manufacturers to You",
-      ar: "من المصانع إليك",
+      en: "Enhancing Local Content",
+      ar: "تعزيز المحتوى المحلي",
     },
     description: {
-      en: "The Saudi B2B online platform for industrial products. Trusted, easy, and secure sourcing.",
-      ar: "منصة إلكترونية سعودية لمنتجات المصانع. حلول موثوقة وسهلة وآمنة.",
+      en: "Championing national products and services to build a thriving, sustainable economy.",
+      ar: "دعم المنتجات والخدمات الوطنية لبناء اقتصاد مزدهر ومستدام.",
     },
-    bgImage: "/marsos-hero-bg-1.jpg",
-    link: "/import-from-saudi",
+    // Image of a construction site with the Riyadh skyline in the background
+    bgImage:
+      "https://images.unsplash.com/photo-1634125425555-27a204487127?auto=format&fit=crop&w=1260&q=80",
+    link: "/about-local-content",
   },
   {
     title: {
-      en: "Empowering Saudi Industry",
-      ar: "تمكين الصناعة السعودية",
+      en: "A Pillar of Vision 2030",
+      ar: "ركيزة من ركائز رؤية 2030",
     },
     description: {
-      en: "Access to many manufactures in Saudi Arabia in majorty of sectors with a seamless transctions",
-      ar: "تجميع المصنعين والمشترين. تقنية حديثة ومدفوعات سلسة وانتشار عالمي.",
+      en: "Aligning with Saudi Vision 2030 to maximize the economic impact of local industries.",
+      ar: "المواءمة مع رؤية السعودية 2030 لتعظيم الأثر الاقتصادي للصناعات المحلية.",
     },
-    bgImage: "/marsos-hero-bg-2.jpg",
-    link: "/about-us",
+    // Image of Riyadh's iconic Kingdom Centre, a symbol of modernization
+    bgImage:
+      "https://images.unsplash.com/photo-1610492572534-3eed2a9c4033?auto=format&fit=crop&w=1260&q=80",
+    link: "/vision-2030",
   },
 ];
 const rightSlides = [
   {
     title: {
-      en: "Verified Saudi Suppliers",
-      ar: "موردون سعوديون موثوقون",
+      en: "Efficient Government Procurement",
+      ar: "كفاءة المشتريات الحكومية",
     },
     description: {
-      en: "Work directly with certified factories across Saudi Arabia. Quality you can trust.",
-      ar: "تعامل مباشرة مع مصانع سعودية معتمدة. جودة موثوقة.",
+      en: "Developing strategies for transparent and effective government spending.",
+      ar: "تطوير الاستراتيجيات واللوائح لتحقيق الشفافية والفعالية في الإنفاق الحكومي.",
     },
-    bgImage: "/marsos-hero-bg-3.jpg",
-    link: "/supplier-onboarding",
+    // Image of a modern, professional business presentation
+    bgImage:
+      "https://images.unsplash.com/photo-1590650516494-0c8e4a4dd67e?auto=format&fit=crop&w=1260&q=80",
+    link: "/procurement-services",
   },
   {
     title: {
-      en: "Seamless & Secure",
-      ar: "سلاسة وأمان",
+      en: "Opportunities for Suppliers",
+      ar: "فرص للموردين",
     },
     description: {
-      en: "Digital tools, fast onboarding, and secure payment for every business transaction.",
-      ar: "أدوات رقمية وتسجيل سريع ودفع آمن لكل معاملة.",
+      en: "Connecting local suppliers with government projects to foster growth.",
+      ar: "ربط الموردين المحليين بالمشاريع الحكومية لتعزيز النمو والشراكة.",
     },
-    bgImage: "/marsos-hero-bg-4.jpg",
-    link: "/contact",
+    // Image of modern logistics and shipping containers
+    bgImage:
+      "https://images.unsplash.com/photo-1578575437130-5278e69142ae?auto=format&fit=crop&w=1260&q=80",
+    link: "/supplier-portal",
   },
 ];
+
+// ... (The rest of the component code remains exactly the same)
 
 function getBaseLocale(locale) {
   if (!locale) return "en";
@@ -140,7 +152,7 @@ export default function HeroSection() {
     return (
       <section className='w-full h-[80vh] flex items-center justify-center bg-[#f9fbe5]'>
         <div className='text-red-500 text-xl text-center'>
-          No products found.
+          No data found.
           <br />
           <span className='text-base text-gray-600'>
             Check Firestore, security rules, or data shape!
@@ -157,8 +169,7 @@ export default function HeroSection() {
           No categories found.
           <br />
           <span className='text-base text-gray-600'>
-            Make sure your products contain <b>category</b> and <b>slug</b>{" "}
-            fields.
+            Make sure your data contains <b>category</b> and <b>slug</b> fields.
           </span>
         </div>
       </section>
