@@ -163,9 +163,10 @@ export default function Header() {
           <Link href='/' className='flex-shrink-0' aria-label='Home'>
             <Image
               src='/logo.svg'
-              alt='Marsos logo'
-              width={260}
-              height={96}
+              alt='logo'
+              width={260} // Intrinsic width of the image file
+              height={96} // Intrinsic height of the image file
+              className='h-auto w-48 md:w-64' // Responsive classes for display size
               priority
             />
           </Link>
