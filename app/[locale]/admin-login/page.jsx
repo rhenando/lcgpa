@@ -42,7 +42,7 @@ export default function AdminLoginPage() {
     <div className='grid grid-cols-1 lg:grid-cols-2 min-h-[80vh] items-center bg-white'>
       <div className='flex flex-col justify-center px-6 py-12 lg:px-24 h-full'>
         <h1 className='mb-8 text-2xl font-semibold text-center'>
-          Marsos Admin
+          Local Content & Government Procurement Authority Admin
         </h1>
         <div className='mx-auto w-full max-w-md space-y-6'>
           <div className='space-y-1'>
@@ -87,7 +87,11 @@ export default function AdminLoginPage() {
         </div>
       </div>
       <div className='hidden lg:flex h-full bg-gray-100 items-center justify-center'>
-        <img src='/logo.svg' alt='Logo' className='w-40 h-40 object-contain' />
+        <img
+          src='/logo.svg'
+          alt='Logo'
+          className='w-120 h-auto object-contain'
+        />
       </div>
     </div>
   );
