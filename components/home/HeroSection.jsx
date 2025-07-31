@@ -22,7 +22,7 @@ const leftSlides = [
     // Image of a construction site with the Riyadh skyline in the background
     bgImage:
       "https://cordovaproperty.com/wp-content/uploads/2025/06/budget-plan-scaled-scaled.webp",
-    link: "/about-local-content",
+    link: "/",
   },
   {
     title: {
@@ -36,7 +36,7 @@ const leftSlides = [
     // Image of Riyadh's iconic Kingdom Centre, a symbol of modernization
     bgImage:
       "https://cordovaproperty.com/wp-content/uploads/2025/06/dubaiskycrapper.webp",
-    link: "/vision-2030",
+    link: "/",
   },
 ];
 const rightSlides = [
@@ -52,7 +52,7 @@ const rightSlides = [
     // Image of a modern, professional business presentation
     bgImage:
       "https://cordovaproperty.com/wp-content/uploads/2025/04/post-4-26-2025.png",
-    link: "/procurement-services",
+    link: "/",
   },
   {
     title: {
@@ -66,7 +66,7 @@ const rightSlides = [
     // Image of modern logistics and shipping containers
     bgImage:
       "https://cordovaproperty.com/wp-content/uploads/2024/06/Dubai-vision.webp",
-    link: "/supplier-portal",
+    link: "/",
   },
 ];
 
