@@ -2,67 +2,68 @@ import ContactForm from "./form"; // Imports the client-side form
 
 export const metadata = {
   title: {
-    default: "Contact Us | Marsos",
-    ar: "اتصل بنا | مرصوص",
+    default: "Contact Us | Government Procurement Authority",
+    ar: "اتصل بنا | هيئة المشتريات الحكومية",
   },
   description: {
     default:
-      "Have a question about your order, a product detail, or need help with returns? Reach out to Marsos and we’ll respond within 1 business day. Friendly, efficient support for all your shopping needs.",
-    ar: "هل لديك سؤال حول طلبك أو تفاصيل منتج، أو تحتاج إلى مساعدة في الإرجاع؟ تواصل مع مرصوص وسنرد عليك خلال يوم عمل واحد. دعم ودود وكفؤ لجميع احتياجات التسوق الخاصة بك.",
+      "Contact the support team for inquiries about government tenders, supplier registration, or technical assistance with the official procurement portal.",
+    ar: "تواصل مع فريق الدعم للاستفسارات حول المنافسات الحكومية، أو تسجيل الموردين، أو المساعدة التقنية المتعلقة بالبوابة الرسمية للمشتريات.",
   },
   keywords: [
-    "contact marsos",
-    "marsos support",
-    "order inquiry",
-    "ecommerce customer support",
-    "product question",
-    "returns and exchanges",
-    "marsos help",
+    "government procurement support",
+    "contact procurement authority",
+    "supplier registration help",
+    "tender inquiry",
+    "Saudi Arabia government support",
+    "دعم المشتريات الحكومية",
+    "تسجيل الموردين",
+    "استفسار عن منافسة",
   ],
   openGraph: {
     title: {
-      default: "Contact Marsos",
-      ar: "اتصل بمرصوص",
+      default: "Contact the Government Procurement Authority",
+      ar: "التواصل مع هيئة المشتريات الحكومية",
     },
     description: {
       default:
-        "Let’s help you with your Marsos order or product question—no hassle, no jargon.",
-      ar: "دعنا نساعدك في استفسارك عن طلبك في مرصوص أو سؤال المنتج—بدون تعقيد أو مصطلحات صعبة.",
+        "Get official support for tenders, supplier registration, and portal inquiries.",
+      ar: "احصل على الدعم الرسمي للمنافسات وتسجيل الموردين والاستفسارات المتعلقة بالبوابة.",
     },
-    url: "https://marsos.com/contact",
-    siteName: "Marsos",
+    // NOTE: Replace with your actual domain
+    url: "https://gpa.gov.sa/contact",
+    siteName: "Government Procurement Authority",
     images: [
       {
-        url: "https://marsos.com/og-image-contact.jpg",
+        // NOTE: Replace with your actual Open Graph image URL
+        url: "https://gpa.gov.sa/og-contact.png",
         width: 1200,
         height: 630,
-        alt: "Contact Marsos Customer Support",
+        alt: "Contact the Government Procurement Authority Support Center",
       },
     ],
     locale: "en_US",
-    alternates: {
-      languages: {
-        ar: "https://marsos.com/ar/contact",
-      },
-    },
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: {
-      default: "Contact Us | Marsos",
-      ar: "اتصل بنا | مرصوص",
+      default: "Contact Us | Government Procurement Authority",
+      ar: "اتصل بنا | هيئة المشتريات الحكومية",
     },
     description: {
       default:
-        "Get in touch about your order, returns, or product questions. Marsos support responds within 1 business day.",
-      ar: "تواصل معنا حول طلبك أو الإرجاع أو استفسارات المنتج. يستجيب دعم مرصوص خلال يوم عمل واحد.",
+        "Official support for government tenders, supplier registration, and technical portal assistance.",
+      ar: "الدعم الرسمي للمنافسات الحكومية، وتسجيل الموردين، والمساعدة التقنية للبوابة.",
     },
-    images: ["https://marsos.com/og-image-contact.jpg"],
+    // NOTE: Replace with your actual Twitter image URL
+    images: ["https://gpa.gov.sa/og-contact.png"],
   },
   alternates: {
+    canonical: "/contact",
     languages: {
-      ar: "/ar/contact",
+      "en-US": "/contact",
+      "ar-SA": "/ar/contact",
     },
   },
 };

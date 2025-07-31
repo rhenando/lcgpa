@@ -7,15 +7,13 @@ import { getStorage } from "firebase/storage";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDLzb9tHMddo9b5sVwMWFfeeIMhxZ0k6fk",
-  authDomain: "marsosv7.firebaseapp.com",
-  projectId: "marsosv7",
-  storageBucket: "marsosv7.firebasestorage.app",
-  messagingSenderId: "981717697036",
-  appId: "1:981717697036:web:cfcebc2a9cd398ffc52429",
-  measurementId: "G-RZH7VK2P51",
+  apiKey: "AIzaSyCXSCOBwTUUxWIv6z0n19Xj6dVQp7Swu2Y",
+  authDomain: "marsos-82cb1.firebaseapp.com",
+  projectId: "marsos-82cb1",
+  storageBucket: "marsos-82cb1.appspot.com",
+  messagingSenderId: "935923725562",
+  appId: "1:935923725562:web:486dd83dcfb953685f8543",
 };
-
 // Initialize Firebase App
 const app = initializeApp(firebaseConfig);
 

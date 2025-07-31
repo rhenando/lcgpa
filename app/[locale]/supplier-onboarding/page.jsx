@@ -216,7 +216,7 @@ export default function SupplierOnboardingPage() {
     >
       <Card className='w-full max-w-4xl bg-white shadow-xl rounded-lg'>
         <CardContent className='p-6 sm:p-10 space-y-6'>
-          <h2 className='text-2xl font-bold text-center text-[#2c6449]'>
+          <h2 className='text-2xl font-bold text-center text-[#004d40]'>
             {t("supplier.welcome.title")}
           </h2>
           <div className='flex justify-center gap-6'>
@@ -224,14 +224,14 @@ export default function SupplierOnboardingPage() {
               <div key={key} className='flex flex-col items-center'>
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold ${
-                    step === i ? "bg-[#2c6449]" : "bg-gray-300"
+                    step === i ? "bg-[#004d40]" : "bg-gray-300"
                   }`}
                 >
                   {i + 1}
                 </div>
                 <div
                   className={`mt-1 text-xs text-center ${
-                    step === i ? "text-[#2c6449] font-medium" : "text-gray-500"
+                    step === i ? "text-[#004d40] font-medium" : "text-gray-500"
                   }`}
                 >
                   {t(key)}
@@ -247,7 +247,7 @@ export default function SupplierOnboardingPage() {
                 </label>
                 <div className='flex flex-col md:flex-row gap-4'>
                   <input
-                    className='w-full md:flex-1 p-2 border rounded-md focus:ring-2 focus:ring-[#2c6449]'
+                    className='w-full md:flex-1 p-2 border rounded-md focus:ring-2 focus:ring-[#004d40]'
                     value={form.nun}
                     onChange={(e) => handleChange("nun", e.target.value)}
                     placeholder={t("supplier.placeholders.nun")}
@@ -255,7 +255,7 @@ export default function SupplierOnboardingPage() {
                   <button
                     onClick={authenticateNun}
                     disabled={loading}
-                    className='w-full md:w-auto md:px-6 bg-[#2c6449] text-white py-2 rounded-md font-semibold hover:bg-[#24513b] transition'
+                    className='w-full md:w-auto md:px-6 bg-[#004d40] text-white py-2 rounded-md font-semibold hover:bg-[#24513b] transition'
                   >
                     {loading
                       ? t("supplier.buttons.authenticating")
@@ -266,7 +266,7 @@ export default function SupplierOnboardingPage() {
             )}
             {step === 1 && (
               <div className='bg-white border rounded-lg shadow-sm p-5 space-y-6'>
-                <h3 className='text-lg font-semibold text-[#2c6449]'>
+                <h3 className='text-lg font-semibold text-[#004d40]'>
                   {t("supplier.labels.issueDate")}{" "}
                   <span className='text-red-500'>*</span>
                 </h3>
@@ -278,8 +278,8 @@ export default function SupplierOnboardingPage() {
                       onClick={() => handleChange("dateType", type)}
                       className={`px-4 py-1 text-sm rounded-full border font-medium transition ${
                         form.dateType === type
-                          ? "bg-[#2c6449] text-white border-[#2c6449]"
-                          : "bg-white text-gray-700 border-gray-300 hover:border-[#2c6449]"
+                          ? "bg-[#004d40] text-white border-[#004d40]"
+                          : "bg-white text-gray-700 border-gray-300 hover:border-[#004d40]"
                       }`}
                     >
                       {t(`supplier.labels.${type}`)}
@@ -310,7 +310,7 @@ export default function SupplierOnboardingPage() {
                       type='button'
                       onClick={verifyIssueDate}
                       disabled={loading}
-                      className='w-full bg-[#2c6449] text-white py-2.5 px-4 rounded-md font-semibold hover:bg-[#24513b] transition text-sm'
+                      className='w-full bg-[#004d40] text-white py-2.5 px-4 rounded-md font-semibold hover:bg-[#24513b] transition text-sm'
                     >
                       {loading
                         ? t("supplier.buttons.verifyingDate")
@@ -323,7 +323,7 @@ export default function SupplierOnboardingPage() {
             {step === 2 && (
               <form onSubmit={submitOnboarding} className='space-y-6'>
                 <div className='border rounded-lg p-4'>
-                  <h3 className='text-[#2c6449] font-semibold mb-3'>
+                  <h3 className='text-[#004d40] font-semibold mb-3'>
                     {t("supplier.legends.companyDetails")}
                   </h3>
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
@@ -365,7 +365,7 @@ export default function SupplierOnboardingPage() {
                         onChange={(e) =>
                           handleChange("crFile", e.target.files[0])
                         }
-                        className='mt-2 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-[#2c6449] file:text-white hover:file:bg-[#24513b]'
+                        className='mt-2 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-[#004d40] file:text-white hover:file:bg-[#24513b]'
                         required
                       />
                       {form.crFileUrl && (
@@ -408,7 +408,7 @@ export default function SupplierOnboardingPage() {
                         onChange={(e) =>
                           handleChange("vatFile", e.target.files[0])
                         }
-                        className='mt-2 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-[#2c6449] file:text-white hover:file:bg-[#24513b]'
+                        className='mt-2 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-[#004d40] file:text-white hover:file:bg-[#24513b]'
                         required
                       />
                       {form.vatFileUrl && (
@@ -525,7 +525,7 @@ export default function SupplierOnboardingPage() {
                   </div>
                 </div>
                 <div className='border rounded-lg p-4'>
-                  <h3 className='text-[#2c6449] font-semibold mb-3'>
+                  <h3 className='text-[#004d40] font-semibold mb-3'>
                     {t("supplier.legends.authorizedPerson")}
                   </h3>
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
@@ -608,7 +608,7 @@ export default function SupplierOnboardingPage() {
                 <button
                   type='submit'
                   disabled={loading}
-                  className='w-full bg-[#2c6449] text-white py-2 rounded-md font-semibold hover:bg-[#24513b] transition'
+                  className='w-full bg-[#004d40] text-white py-2 rounded-md font-semibold hover:bg-[#24513b] transition'
                 >
                   {loading
                     ? t("supplier.buttons.uploading")

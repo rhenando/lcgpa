@@ -1,166 +1,191 @@
 "use client";
+
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  Instagram,
-  Linkedin,
-  Twitter,
-  Facebook,
-  Youtube,
-  Globe,
-} from "lucide-react";
+import { Linkedin, Twitter, Youtube } from "lucide-react"; // Removed irrelevant icons
 import LanguageSelector from "@/components/header/LanguageSelector";
-import { useEffect } from "react";
 
 export default function Footer() {
-  const t = useTranslations("footer"); // Use the "footer" namespace or "" if you don't use namespaces
+  const t = useTranslations("footer");
+  const currentYear = new Date().getFullYear();
 
-  useEffect(() => {
-    if (!document.getElementById("gogetssl-seal-script")) {
-      const script = document.createElement("script");
-      script.src =
-        "https://gogetssl-cdn.s3.eu-central-1.amazonaws.com/site-seals/gogetssl-seal.js";
-      script.async = true;
-      script.id = "gogetssl-seal-script";
-      document.body.appendChild(script);
-    }
-  }, []);
-
-  const paymentLogos = [
-    { src: "/images/payments/visa.png", alt: "Visa" },
-    { src: "/images/payments/master.png", alt: "Mastercard" },
-    { src: "/images/payments/applepay.png", alt: "Apple Pay" },
-    { src: "/images/payments/mada.png", alt: "Mada" },
-    { src: "/images/payments/tamara.png", alt: "Tamara" },
-    { src: "/images/payments/tabby.png", alt: "Tabby" },
+  // NOTE: A Government Procurement Authority would have official social media accounts.
+  // Replace '#' with your actual URLs.
+  const socialLinks = [
+    {
+      href: "#",
+      icon: <Twitter size={20} />,
+      label: "Twitter",
+    },
+    {
+      href: "#",
+      icon: <Linkedin size={20} />,
+      label: "LinkedIn",
+    },
+    {
+      href: "#",
+      icon: <Youtube size={20} />,
+      label: "Youtube",
+    },
   ];
 
   return (
-    <footer className='bg-[#2c6449] text-white text-sm'>
-      <div className='max-w-screen-xl mx-auto px-4 py-10'>
-        {/* Top Grid */}
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6'>
-          {/* About */}
-          <div>
-            <h3 className='font-semibold mb-3 text-[#f9d783]'>
-              {t("aboutTitle")}
-            </h3>
-            <p className='text-gray-200'>{t("aboutText")}</p>
-            <Link
-              href='/about-us'
-              className='inline-block mt-2 text-[#f9d783] hover:underline font-medium transition'
-            >
-              {t("about_us") || "About Us"}
-            </Link>
+    // MODIFIED: Consistent, more formal dark green background.
+    <footer className='bg-[#004d40] text-white'>
+      <div className='max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12'>
+        {/* Top Grid: Re-structured for government context */}
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8'>
+          {/* About the Authority */}
+          <div className='sm:col-span-2'>
+            {/* Using your main logo here for brand reinforcement */}
+            <Image
+              src='/logo.svg' // NOTE: A white version of your logo is needed for dark backgrounds.
+              alt={t("authorityName")}
+              width={180}
+              height={40}
+              className='mb-4 bg-white rounded-md'
+            />
+            <p className='text-gray-300 text-sm'>{t("aboutText")}</p>
           </div>
 
-          {/* Quick Links */}
+          {/* Important Links */}
           <div>
-            <h3 className='font-semibold mb-3 text-[#f9d783]'>
-              {t("quickLinks")}
+            <h3 className='font-semibold mb-4 text-white uppercase tracking-wider'>
+              {t("importantLinks")}
             </h3>
-            <ul className='space-y-2'>
+            <ul className='space-y-3 text-sm'>
               <li>
-                <Link href='/products' className='hover:underline'>
-                  {t("exploreProducts")}
+                <Link
+                  href='/tenders'
+                  className='text-gray-300 hover:text-white hover:underline'
+                >
+                  {t("tendersAndOpportunities")}
                 </Link>
               </li>
               <li>
-                <Link href='/categories' className='hover:underline'>
-                  {t("viewCategories")}
+                <Link
+                  href='/supplier-registration'
+                  className='text-gray-300 hover:text-white hover:underline'
+                >
+                  {t("supplierRegistration")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href='/regulations'
+                  className='text-gray-300 hover:text-white hover:underline'
+                >
+                  {t("lawsAndRegulations")}
                 </Link>
               </li>
             </ul>
           </div>
+
           {/* Support */}
           <div>
-            <h3 className='font-semibold mb-3 text-[#f9d783]'>
+            <h3 className='font-semibold mb-4 text-white uppercase tracking-wider'>
               {t("support")}
             </h3>
-            <ul className='space-y-2'>
+            <ul className='space-y-3 text-sm'>
               <li>
-                <Link href='/faq' className='hover:underline'>
+                <Link
+                  href='/faq'
+                  className='text-gray-300 hover:text-white hover:underline'
+                >
                   {t("helpCenter")}
                 </Link>
               </li>
               <li>
                 <Link
-                  href='/updated-terms-and-conditions'
-                  className='hover:underline'
+                  href='/contact'
+                  className='text-gray-300 hover:text-white hover:underline'
+                >
+                  {t("contactUs")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href='/terms-of-service'
+                  className='text-gray-300 hover:text-white hover:underline'
                 >
                   {t("terms")}
                 </Link>
               </li>
               <li>
                 <Link
-                  href='/updated-privacy-policy'
-                  className='hover:underline'
+                  href='/privacy-policy'
+                  className='text-gray-300 hover:text-white hover:underline'
                 >
                   {t("privacy")}
                 </Link>
               </li>
             </ul>
           </div>
-          {/* Language + Social */}
-          <div>
-            <h3 className='font-semibold mb-3 text-[#f9d783]'>
-              {t("followUs")}
-            </h3>
-            <div className='flex gap-4 flex-wrap text-white'>
-              <Instagram size={18} />
-              <Linkedin size={18} />
-              <Twitter size={18} />
-              <Facebook size={18} />
-              <Youtube size={18} />
-              <Globe size={18} />
+        </div>
+
+        {/* Bottom Section: Separator and social links */}
+        <div className='mt-10 border-t border-white/20 pt-8 flex flex-col sm:flex-row justify-between items-center gap-6'>
+          {/* Social Links */}
+          <div className='flex items-center gap-4'>
+            <p className='text-sm font-semibold'>{t("followUs")}:</p>
+            <div className='flex gap-3'>
+              {socialLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  aria-label={link.label}
+                  className='text-gray-300 hover:text-white transition-colors'
+                >
+                  {link.icon}
+                </a>
+              ))}
             </div>
           </div>
+
+          {/* Language Selector */}
+          <div>
+            <LanguageSelector />
+          </div>
         </div>
-        {/* Payments + Logo + SSL */}
-        <div className='mt-10 flex flex-col md:flex-row justify-between items-center gap-y-6 border-t pt-6'>
-          <div className='relative w-[180px] h-[64px]'>
-            <Image
-              src='/saudi_business_logo.svg'
-              alt='Saudi Business Center'
-              fill
-              className='object-contain'
-              priority
-            />
+
+        {/* Trust Logos and Copyright */}
+        <div className='mt-10 border-t border-white/20 pt-8 flex flex-col md:flex-row items-center justify-between gap-8'>
+          <div className='text-center text-xs text-gray-400'>
+            <span>{t("rights", { year: currentYear })}</span>
           </div>
-          <div className='flex flex-wrap justify-center gap-1'>
-            {paymentLogos.map(({ src, alt }, i) => (
-              <Image
-                key={i}
-                src={src}
-                alt={alt}
-                width={80}
-                height={50}
-                className='object-contain h-6'
-                style={{ width: "auto" }}
-              />
-            ))}
-          </div>
-          <div className='text-center'>
+
+          {/* Local Government Trust Logos */}
+          <div className='flex items-center gap-x-6'>
             <a
-              href='https://www.gogetssl.com'
-              rel='nofollow'
-              title='GoGetSSL Site Seal Logo'
+              href='https://vision2030.gov.sa'
+              target='_blank'
+              rel='noopener noreferrer'
             >
-              <div
-                id='gogetssl-animated-seal'
-                style={{
-                  width: "160px",
-                  height: "58px",
-                  display: "inline-block",
-                }}
+              <Image
+                src='/images/logos/vision_2030_logo.svg' // You need to add this logo
+                alt='Saudi Vision 2030'
+                width={100}
+                height={55}
+                className='object-contain'
+              />
+            </a>
+            <a
+              href='https://bc.gov.sa'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <Image
+                src='/images/logos/saudi_business_logo.svg' // This logo was already in your code
+                alt='Saudi Business Center'
+                width={150}
+                height={55}
+                className='object-contain'
               />
             </a>
           </div>
-        </div>
-        {/* Copyright */}
-        <div className='text-center text-xs text-gray-300 mt-6'>
-          {t("rights")}
         </div>
       </div>
     </footer>

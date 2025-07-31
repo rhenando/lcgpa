@@ -164,8 +164,8 @@ export default function Header() {
             <Image
               src='/logo.svg'
               alt='Marsos logo'
-              width={48}
-              height={48}
+              width={260}
+              height={96}
               priority
             />
           </Link>
@@ -207,7 +207,7 @@ export default function Header() {
             />
           </div>
           {/* Desktop: full menu */}
-          <div className='hidden lg:flex items-start space-x-8 ml-6 text-[#2c6449]'>
+          <div className='hidden lg:flex items-start space-x-8 ml-6 text-[#004d40]'>
             <Popover open={userMenuOpen} onOpenChange={setUserMenuOpen}>
               <PopoverTrigger asChild>
                 <button
@@ -294,7 +294,7 @@ export default function Header() {
                 )}
               </Link>
             )}
-            <div className='flex flex-col items-center text-[#2c6449]'>
+            <div className='flex flex-col items-center text-[#004d40]'>
               <MapPin size={18} />
               <span className='text-xs mt-2'>{renderLocationText()}</span>
             </div>
@@ -306,7 +306,7 @@ export default function Header() {
       </div>
       {/* Secondary nav (desktop only) */}
       <div className='hidden lg:block bg-white border-y border-gray-200'>
-        <div className='max-w-7xl mx-auto px-6 flex items-center h-10 text-[#2c6449] text-md space-x-8'>
+        <div className='max-w-7xl mx-auto px-6 flex items-center h-10 text-[#004d40] text-md space-x-8'>
           <Link
             href='/categories'
             className='font-semibold hover:text-green-800'

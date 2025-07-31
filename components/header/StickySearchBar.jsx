@@ -148,7 +148,7 @@ export default function Header() {
     <header className='w-full bg-white/90 backdrop-blur-md shadow-sm z-[99999]'>
       <div className='max-w-full mx-auto flex items-center justify-between px-4 md:px-6 h-26'>
         <Link href='/' className='flex-shrink-0'>
-          <Image src='/logo.svg' alt='Logo' width={48} height={48} />
+          <Image src='/logo.svg' alt='Logo' width={260} height={96} />
         </Link>
         <div className='hidden md:flex flex-1 mx-6'>
           <ProductSearch />

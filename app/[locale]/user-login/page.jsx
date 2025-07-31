@@ -36,7 +36,8 @@ import { fetchSessionUser } from "@/store/authSlice";
 export default function AuthPage() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const t = useTranslations("login");
+  // MODIFIED: Changed translation namespace for clarity, you can keep "login" if you prefer.
+  const t = useTranslations("Auth");
   const locale = useLocale();
   const isRtl = locale === "ar";
   const { user, loading: authLoading } = useSelector((s) => s.auth);
@@ -83,41 +84,24 @@ export default function AuthPage() {
 
   const fullPhoneNumber = `${countryCode}${phone}`;
 
-  // Email validation
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePassword = (password) => password.length >= 6;
 
-  // Password validation
-  const validatePassword = (password) => {
-    return password.length >= 6;
-  };
-
-  // Email/Password Authentication
   const handleEmailAuth = async () => {
     if (!termsAccepted) {
       toast.error(t("errors.mustAcceptTerms"));
       return;
     }
 
-    // Validate email
     if (!validateEmail(email)) {
-      setEmailError(
-        locale === "ar" ? "البريد الإلكتروني غير صحيح" : "Invalid email address"
-      );
+      setEmailError(t("errors.invalidEmail"));
       return;
     } else {
       setEmailError("");
     }
 
-    // Validate password
     if (!validatePassword(password)) {
-      setPasswordError(
-        locale === "ar"
-          ? "كلمة المرور يجب أن تكون 6 أحرف على الأقل"
-          : "Password must be at least 6 characters"
-      );
+      setPasswordError(t("errors.invalidPassword"));
       return;
     } else {
       setPasswordError("");
@@ -128,28 +112,19 @@ export default function AuthPage() {
       let userCredential;
 
       if (isSignUp) {
-        // Create new account
         userCredential = await createUserWithEmailAndPassword(
           auth,
           email,
           password
         );
-
-        // Create user document in Firestore
         await setDoc(doc(db, "users", userCredential.user.uid), {
           email: email,
           phone: "",
           createdAt: new Date(),
           authMethod: "email",
         });
-
-        toast.success(
-          locale === "ar"
-            ? "تم إنشاء الحساب بنجاح"
-            : "Account created successfully"
-        );
+        toast.success(t("messages.accountCreated"));
       } else {
-        // Sign in existing user
         userCredential = await signInWithEmailAndPassword(
           auth,
           email,
@@ -158,24 +133,23 @@ export default function AuthPage() {
         toast.success(t("messages.welcomeBack"));
       }
 
-      // Set session
       const idToken = await userCredential.user.getIdToken();
       await fetch("/api/sessionLogin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idToken }),
       });
-
       await dispatch(fetchSessionUser()).unwrap();
 
-      // Determine redirect route
       const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
       let targetRoute = "/";
 
       if (userDoc.exists()) {
         const data = userDoc.data();
+        // NOTE: This logic is perfect for a procurement authority (e.g., redirecting suppliers).
         targetRoute = data.role === "supplier" ? "/supplier-dashboard" : "/";
       } else if (isSignUp) {
+        // NOTE: This route is great for new users to define their role (e.g., supplier, agency).
         targetRoute = `/user-choices?uid=${
           userCredential.user.uid
         }&email=${encodeURIComponent(email)}`;
@@ -184,33 +158,23 @@ export default function AuthPage() {
       router.push(targetRoute);
     } catch (err) {
       console.error("Email Auth Error:", err);
+      // MODIFIED: Using translation function for errors.
       if (err.code === "auth/user-not-found") {
         setIsSignUp(true);
-        toast.info(
-          locale === "ar" ? "سيتم إنشاء حساب جديد" : "Creating a new account"
-        );
+        toast.info(t("messages.creatingNewAccount"));
       } else if (err.code === "auth/email-already-in-use") {
         setIsSignUp(false);
-        toast.error(
-          locale === "ar"
-            ? "البريد الإلكتروني مُستخدم بالفعل"
-            : "Email already in use"
-        );
+        toast.error(t("errors.emailInUse"));
       } else if (err.code === "auth/wrong-password") {
-        toast.error(
-          locale === "ar" ? "كلمة المرور غير صحيحة" : "Incorrect password"
-        );
+        toast.error(t("errors.incorrectPassword"));
       } else {
-        toast.error(
-          locale === "ar" ? "فشل في المصادقة" : "Authentication failed"
-        );
+        toast.error(t("errors.authFailed"));
       }
     } finally {
       setLoading(false);
     }
   };
 
-  // Phone/OTP Authentication (existing logic)
   const setupRecaptcha = () => {
     if (window.recaptchaVerifier) {
       try {
@@ -221,7 +185,10 @@ export default function AuthPage() {
     window.recaptchaVerifier = new RecaptchaVerifier(
       auth,
       "recaptcha-container",
-      { size: "invisible", callback: () => {} }
+      {
+        size: "invisible",
+        callback: () => {},
+      }
     );
   };
 
@@ -230,6 +197,7 @@ export default function AuthPage() {
       toast.error(t("errors.mustAcceptTerms"));
       return;
     }
+    // NOTE: This validation is specific to KSA numbers and seems appropriate.
     if (phone.length !== 9 || !phone.startsWith("5")) {
       toast.error(t("errors.invalidPhone"));
       return;
@@ -302,6 +270,21 @@ export default function AuthPage() {
     }
   };
 
+  // MODIFIED: Updated titles and descriptions to be more formal and relevant.
+  const getTitle = () => {
+    if (activeTab === "email") {
+      return isSignUp ? t("title.register") : t("title.signIn");
+    }
+    return t(`title.${stage}`);
+  };
+
+  const getDescription = () => {
+    if (activeTab === "email") {
+      return isSignUp ? t("desc.register") : t("desc.signIn");
+    }
+    return t(`desc.${stage}`);
+  };
+
   return (
     <div className='lg:grid lg:grid-cols-2 min-h-[80vh] items-center'>
       <div
@@ -312,66 +295,43 @@ export default function AuthPage() {
           <div className='w-full max-w-md space-y-8'>
             <div className='text-center mt-4'>
               <h2 className='text-xl sm:text-2xl font-extrabold text-gray-900'>
-                {activeTab === "email"
-                  ? isSignUp
-                    ? locale === "ar"
-                      ? "إنشاء حساب جديد"
-                      : "Create Account"
-                    : locale === "ar"
-                    ? "تسجيل الدخول"
-                    : "Sign In"
-                  : t(`title.${stage}`)}
+                {getTitle()}
               </h2>
-              <p className='mt-2 text-sm text-gray-600'>
-                {activeTab === "email"
-                  ? isSignUp
-                    ? locale === "ar"
-                      ? "أدخل بياناتك لإنشاء حساب جديد"
-                      : "Enter your details to create a new account"
-                    : locale === "ar"
-                    ? "أدخل بياناتك لتسجيل الدخول"
-                    : "Enter your credentials to sign in"
-                  : t(`desc.${stage}`)}
-              </p>
+              <p className='mt-2 text-sm text-gray-600'>{getDescription()}</p>
             </div>
 
             <Card className='bg-white shadow-lg rounded-lg overflow-hidden'>
               <CardContent className='px-6 py-8 space-y-6'>
                 <Tabs value={activeTab} onValueChange={setActiveTab}>
                   <TabsList className='grid w-full grid-cols-2'>
+                    {/* MODIFIED: Tab titles changed for clarity */}
                     <TabsTrigger
                       value='email'
                       className='flex items-center gap-2'
                     >
                       <Mail className='h-4 w-4' />
-                      {locale === "ar"
-                        ? "البريد والرقم السري"
-                        : "Email & Password"}
+                      {t("tabs.email")}
                     </TabsTrigger>
                     <TabsTrigger
                       value='phone'
                       className='flex items-center gap-2'
                     >
                       <Phone className='h-4 w-4' />
-                      {locale === "ar" ? "الجوال ورمز التحقق" : "Phone & OTP"}
+                      {t("tabs.phone")}
                     </TabsTrigger>
                   </TabsList>
 
                   {/* Email & Password Tab */}
-                  <TabsContent value='email' className='space-y-4'>
+                  <TabsContent value='email' className='space-y-4 pt-4'>
                     <div className='space-y-4'>
                       <div>
                         <label className='block text-sm font-medium text-gray-700 mb-1'>
-                          {locale === "ar" ? "البريد الإلكتروني" : "Email"}
+                          {t("labels.email")}
                         </label>
                         <div className='relative'>
                           <Input
                             type='email'
-                            placeholder={
-                              locale === "ar"
-                                ? "you@example.com"
-                                : "you@example.com"
-                            }
+                            placeholder='you@example.com'
                             value={email}
                             onChange={(e) => {
                               setEmail(e.target.value);
@@ -395,7 +355,7 @@ export default function AuthPage() {
 
                       <div>
                         <label className='block text-sm font-medium text-gray-700 mb-1'>
-                          {locale === "ar" ? "كلمة المرور" : "Password"}
+                          {t("labels.password")}
                         </label>
                         <div className='relative'>
                           <Input
@@ -440,8 +400,9 @@ export default function AuthPage() {
                         />
                         <span>
                           {t("labels.acceptTerms")}{" "}
+                          {/* MODIFIED: Links point to more standard government pages */}
                           <a
-                            href='/updated-terms-and-conditions'
+                            href='/terms-of-service'
                             target='_blank'
                             className='text-primary font-medium hover:underline'
                           >
@@ -449,7 +410,7 @@ export default function AuthPage() {
                           </a>{" "}
                           &amp;{" "}
                           <a
-                            href='/updated-privacy-policy'
+                            href='/privacy-policy'
                             target='_blank'
                             className='text-primary font-medium hover:underline'
                           >
@@ -464,16 +425,10 @@ export default function AuthPage() {
                         className='w-full'
                       >
                         {loading
-                          ? locale === "ar"
-                            ? "جاري المعالجة..."
-                            : "Processing..."
+                          ? t("buttons.processing")
                           : isSignUp
-                          ? locale === "ar"
-                            ? "إنشاء حساب"
-                            : "Sign Up"
-                          : locale === "ar"
-                          ? "تسجيل الدخول"
-                          : "Sign In"}
+                          ? t("buttons.register")
+                          : t("buttons.signIn")}
                       </Button>
 
                       <div className='text-center'>
@@ -483,19 +438,15 @@ export default function AuthPage() {
                           className='text-sm text-primary hover:underline'
                         >
                           {isSignUp
-                            ? locale === "ar"
-                              ? "لديك حساب؟ تسجيل الدخول"
-                              : "Have an account? Sign In"
-                            : locale === "ar"
-                            ? "ليس لديك حساب؟ إنشاء حساب"
-                            : "Need an account? Sign Up"}
+                            ? t("links.alreadyRegistered")
+                            : t("links.notRegistered")}
                         </button>
                       </div>
                     </div>
                   </TabsContent>
 
                   {/* Phone & OTP Tab */}
-                  <TabsContent value='phone' className='space-y-4'>
+                  <TabsContent value='phone' className='space-y-4 pt-4'>
                     {stage === "phone" && (
                       <>
                         {phoneError && (
@@ -504,6 +455,7 @@ export default function AuthPage() {
                           </div>
                         )}
                         <div className='relative flex gap-2'>
+                          {/* NOTE: You can add more country codes if needed. */}
                           <select
                             value={countryCode}
                             onChange={(e) => setCountryCode(e.target.value)}
@@ -515,21 +467,6 @@ export default function AuthPage() {
                             <option value='+971'>
                               {t("phoneCodes.ae")} (+971)
                             </option>
-                            <option value='+973'>
-                              {t("phoneCodes.bh")} (+973)
-                            </option>
-                            <option value='+965'>
-                              {t("phoneCodes.kw")} (+965)
-                            </option>
-                            <option value='+968'>
-                              {t("phoneCodes.om")} (+968)
-                            </option>
-                            <option value='+974'>
-                              {t("phoneCodes.qa")} (+974)
-                            </option>
-                            <option value='+63'>
-                              {t("phoneCodes.ph")} (+63)
-                            </option>
                           </select>
                           <div className='relative flex-1'>
                             <Input
@@ -539,25 +476,11 @@ export default function AuthPage() {
                               value={phone}
                               maxLength={9}
                               onChange={(e) => {
-                                let raw = e.target.value;
-                                let val = raw.replace(/\D/g, "");
-                                const numbersOnlyMsg =
-                                  locale === "ar"
-                                    ? "يسمح فقط بالأرقام"
-                                    : "Numbers only allowed";
-                                const mustStartWith5Msg =
-                                  locale === "ar"
-                                    ? "رقم الجوال يجب أن يبدأ بـ 5"
-                                    : "Phone number must start with 5";
-                                if (raw && /[^0-9]/.test(raw)) {
-                                  setPhoneError(numbersOnlyMsg);
-                                } else if (val && val[0] !== "5") {
-                                  setPhoneError(mustStartWith5Msg);
-                                } else {
-                                  setPhoneError("");
-                                }
+                                let val = e.target.value.replace(/\D/g, "");
                                 if (val.length > 9) val = val.slice(0, 9);
                                 setPhone(val);
+                                // Clear error as user types
+                                if (phoneError) setPhoneError("");
                               }}
                               className='pr-10'
                             />
@@ -580,7 +503,7 @@ export default function AuthPage() {
                             <span>
                               {t("labels.acceptTerms")}{" "}
                               <a
-                                href='/updated-terms-and-conditions'
+                                href='/terms-of-service'
                                 target='_blank'
                                 className='text-primary font-medium hover:underline'
                               >
@@ -588,7 +511,7 @@ export default function AuthPage() {
                               </a>{" "}
                               &amp;{" "}
                               <a
-                                href='/updated-privacy-policy'
+                                href='/privacy-policy'
                                 target='_blank'
                                 className='text-primary font-medium hover:underline'
                               >
@@ -612,7 +535,7 @@ export default function AuthPage() {
                                 }
                                 className='w-full'
                               >
-                                {t("buttons.signUp")}
+                                {t("buttons.registerNow")}
                               </Button>
                             </div>
                           )}
@@ -665,13 +588,16 @@ export default function AuthPage() {
         </div>
       </div>
 
-      {/* Right side branding section */}
-      <div className='hidden lg:flex h-full bg-gradient-to-br from-[#2c6449] to-green-400 text-white flex-col items-center justify-center p-10'>
-        <img src='/logo.svg' alt='Marsos Logo' className='w-28 mb-4' />
+      {/* MODIFIED: Right side branding section updated */}
+      <div className='hidden lg:flex h-full bg-gradient-to-br from-[#004d40] to-[#00796b] text-white flex-col items-center justify-center p-10 text-center'>
+        {/* NOTE: Replace with your authority's logo */}
+        <img
+          src='/logo.svg'
+          alt='Government Procurement Authority Logo'
+          className='w-96'
+        />
         <h1 className='text-4xl font-bold mb-4'>{t("welcome.title")}</h1>
-        <p className='text-lg max-w-sm text-center opacity-80'>
-          {t("welcome.subtitle")}
-        </p>
+        <p className='text-lg max-w-sm opacity-80'>{t("welcome.subtitle")}</p>
       </div>
 
       <div id='recaptcha-container' className='hidden' />

@@ -39,19 +39,19 @@
     "noResults": "No products found."
   },
   "footer": {
-    "aboutTitle": "About Us",
-    "aboutText": "Marsos is your trusted partner for discovering top suppliers and products in Saudi Arabia. We connect buyers and suppliers for seamless, secure trading.",
-    "quickLinks": "Quick Links",
-    "exploreProducts": "Explore Products",
-    "viewCategories": "View Categories",
-    "support": "Support",
-    "helpCenter": "Help Center",
-    "about_us": "About Us",
-    "terms": "Terms & Conditions",
+    "authorityName": "Government Procurement Authority",
+    "aboutText": "The official portal for managing government tenders and procurement, enhancing transparency and efficiency in line with Saudi Vision 2030.",
+    "importantLinks": "Important Links",
+    "tendersAndOpportunities": "Tenders & Opportunities",
+    "supplierRegistration": "Supplier Registration",
+    "lawsAndRegulations": "Laws & Regulations",
+    "support": "Support & Help",
+    "helpCenter": "Help Center (FAQ)",
+    "contactUs": "Contact Us",
+    "terms": "Terms of Service",
     "privacy": "Privacy Policy",
-    "language": "Language",
     "followUs": "Follow Us",
-    "rights": "© 2025 Marsos. All rights reserved."
+    "rights": "© {year} Government Procurement Authority. All rights reserved."
   },
   "rfq": {
     "shipping": "Shipping Country",
@@ -1558,5 +1558,204 @@
     },
     "open": "Open",
     "all": "All"
+  },
+  "Auth": {
+    "welcome": {
+      "title": "Government Procurement Portal",
+      "subtitle": "Secure access for suppliers and government entities to manage procurement activities."
+    },
+    "title": {
+      "signIn": "Portal Sign-In",
+      "register": "Register New Account",
+      "phone": "Enter Your Phone Number",
+      "otp": "Enter Verification Code"
+    },
+    "desc": {
+      "signIn": "Use your registered credentials to access the portal.",
+      "register": "Provide your details to create a new account.",
+      "phone": "We will send a one-time verification code to your mobile.",
+      "otp": "A 6-digit code has been sent to your number."
+    },
+    "tabs": {
+      "email": "Email & Password",
+      "phone": "Phone & OTP"
+    },
+    "labels": {
+      "email": "Official Email Address",
+      "password": "Password",
+      "acceptTerms": "I agree to the"
+    },
+    "placeholders": {
+      "phone": "5X XXX XXXX"
+    },
+    "buttons": {
+      "signIn": "Sign In",
+      "register": "Register Account",
+      "processing": "Processing...",
+      "sendOtp": "Send Verification Code",
+      "sending": "Sending...",
+      "verifyOtp": "Verify & Sign In",
+      "verifying": "Verifying...",
+      "registerNow": "Register Now"
+    },
+    "links": {
+      "terms": "Terms of Service",
+      "privacy": "Privacy Policy",
+      "alreadyRegistered": "Already registered? Sign In",
+      "notRegistered": "Need an account? Register"
+    },
+    "messages": {
+      "otpSent": "Verification code sent successfully.",
+      "welcomeBack": "Welcome back! You have been signed in.",
+      "accountCreated": "Account created successfully.",
+      "creatingNewAccount": "This email is not registered. Please continue to create a new account.",
+      "noAccount": "This phone number is not registered with an account."
+    },
+    "errors": {
+      "mustAcceptTerms": "You must accept the terms and privacy policy.",
+      "invalidEmail": "Please enter a valid email address.",
+      "invalidPassword": "Password must be at least 6 characters.",
+      "emailInUse": "This email address is already in use.",
+      "incorrectPassword": "Incorrect password. Please try again.",
+      "authFailed": "Authentication failed. Please try again later.",
+      "invalidPhone": "Please enter a valid 9-digit phone number starting with 5.",
+      "otpSendFailed": "Failed to send verification code.",
+      "invalidOtp": "The verification code is invalid.",
+      "otpVerifyFailed": "Failed to verify the code. Please try again."
+    },
+    "phoneCodes": {
+      "sa": "Saudi Arabia",
+      "ae": "UAE",
+      "bh": "Bahrain",
+      "kw": "Kuwait",
+      "om": "Oman",
+      "qa": "Qatar",
+      "ph": "Philippines"
+    }
+  },
+  "UserChoice": {
+    "title": "Complete Your Registration",
+    "description": "Please select the role that best describes you to continue.",
+    "roles": {
+      "supplier": {
+        "title": "I am a Supplier",
+        "description": "For companies and establishments that bid on tenders."
+      },
+      "buyer": {
+        "title": "I am a Buyer",
+        "description": "For organizations that create and manage tenders."
+      }
+    },
+    "welcome": {
+      "title": "One Final Step",
+      "subtitle": "Defining your role helps us tailor the portal experience to your specific needs."
+    }
+  },
+  "SupplierOnboarding": {
+    "title": "Supplier Registration Application",
+    "description": "Please fill out the form below to register as an official supplier. All fields are required.",
+    "sections": {
+      "companyInfo": "Company Information",
+      "documents": "Required Documents",
+      "authPerson": "Authorized Person & Account Details"
+    },
+    "labels": {
+      "companyName": "Company Name (as per CR)",
+      "companyEmail": "Official Company Email",
+      "companyPhone": "Company Phone Number",
+      "crNumber": "Commercial Registration (CR) Number",
+      "vatNumber": "VAT Registration Number",
+      "crExpiry": "CR Expiry Date",
+      "address": "National Address",
+      "city": "City",
+      "country": "Country",
+      "crFile": "Commercial Registration (CR) Document",
+      "vatFile": "VAT Certificate",
+      "clickToUpload": "Click to upload a file",
+      "fileTypes": "PDF, PNG, JPG up to 10MB",
+      "authPersonName": "Full Name",
+      "authPersonId": "National ID / Iqama Number",
+      "authPersonMobile": "Mobile Number",
+      "authPersonEmail": "Email (for login)",
+      "password": "Password",
+      "passwordHint": "This will be used to log in to the portal. Minimum 6 characters."
+    },
+    "buttons": {
+      "submit": "Submit Application for Review",
+      "submitting": "Submitting..."
+    },
+    "errors": {
+      "allFieldsRequired": "Please complete all required fields and upload the necessary documents.",
+      "passwordLength": "Password must be at least 6 characters long.",
+      "emailInUse": "This email address is already registered. Please use a different one.",
+      "submitFailed": "Application submission failed. Please try again."
+    },
+    "messages": {
+      "submitSuccess": "Your application has been submitted successfully and is now pending review."
+    }
+  },
+  "Contact": {
+    "title": "Contact Us",
+    "description": "Have a question about a tender, need help with registration, or want to report a technical issue? Our dedicated support team is here to assist you.",
+    "details": {
+      "title": "Official Contact Information",
+      "phoneLabel": "Unified Number",
+      "phone": "9200XXXXX",
+      "emailLabel": "Support Email",
+      "email": "support@gpa.gov.sa",
+      "address": "Digital City, Riyadh, Kingdom of Saudi Arabia",
+      "hours": "Hours: Sun–Thu, 8 AM–4 PM (GMT+3)"
+    },
+    "faq": {
+      "title": "Quick Links",
+      "registration": "How to register as a new supplier?",
+      "tendering": "How does the tendering process work?",
+      "technical": "Common technical support questions",
+      "viewAll": "View All FAQs"
+    },
+    "form": {
+      "name": {
+        "label": "Full Name",
+        "placeholder": "Your full name"
+      },
+      "email": {
+        "label": "Email Address",
+        "placeholder": "you@company.com"
+      },
+      "category": {
+        "label": "Inquiry Category",
+        "placeholder": "Select a category…",
+        "options": {
+          "general": "General Inquiry",
+          "tender": "Tender / Auction Inquiry",
+          "registration": "Supplier Registration Support",
+          "technical": "Technical Issue / Bug Report",
+          "feedback": "Feedback & Suggestions"
+        }
+      },
+      "subject": {
+        "label": "Subject",
+        "placeholder": "A brief summary of your inquiry"
+      },
+      "tenderNumber": {
+        "label": "Tender Number (if applicable)",
+        "placeholder": "e.g., GPA-TDR-12345"
+      },
+      "message": {
+        "label": "Message",
+        "placeholder": "Please describe your issue or question in detail…"
+      },
+      "button": {
+        "submit": "Send Message",
+        "submitting": "Sending…"
+      }
+    },
+    "toast": {
+      "success": "Your message has been sent successfully!",
+      "error": {
+        "allFields": "Please fill out all required fields.",
+        "general": "Something went wrong. Please try again later."
+      }
+    }
   }
 }

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { db } from "@/firebase/config";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,13 +24,14 @@ import Link from "next/link";
 
 export default function ContactPage() {
   const router = useRouter();
+  const t = useTranslations("Contact");
   const [status, setStatus] = useState("idle");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     category: "",
     subject: "",
-    orderNumber: "",
+    tenderNumber: "", // Changed from orderNumber
     message: "",
     honeypot: "",
   });
@@ -45,7 +47,19 @@ export default function ContactPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.honeypot) return;
+    if (formData.honeypot) return; // Simple spam trap
+
+    // Basic validation
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.category ||
+      !formData.subject ||
+      !formData.message
+    ) {
+      toast.error(t("toast.error.allFields"));
+      return;
+    }
 
     setStatus("submitting");
 
@@ -55,101 +69,124 @@ export default function ContactPage() {
         email: formData.email,
         category: formData.category,
         subject: formData.subject,
-        orderNumber: formData.orderNumber || null,
+        tenderNumber: formData.tenderNumber || null, // Updated field
         message: formData.message,
-        status: "unread",
+        status: "new",
         createdAt: serverTimestamp(),
       });
 
-      toast.success("✅ Your message has been sent!");
+      toast.success(t("toast.success"));
       setFormData({
         name: "",
         email: "",
         category: "",
         subject: "",
-        orderNumber: "",
+        tenderNumber: "",
         message: "",
         honeypot: "",
       });
       setStatus("submitted");
 
-      setTimeout(() => {
-        router.push("/thank-you");
-      }, 3000);
+      // Optional: Redirect to a thank-you page after a delay
+      // setTimeout(() => router.push("/thank-you"), 2000);
     } catch (err) {
-      console.error("❌ Contact form error:", err);
-      toast.error("Something went wrong. Please try again.");
+      console.error("Contact form error:", err);
+      toast.error(t("toast.error.general"));
       setStatus("error");
     }
   };
 
+  const inquiryCategories = [
+    { value: "general", label: t("form.category.options.general") },
+    { value: "tender_inquiry", label: t("form.category.options.tender") },
+    {
+      value: "registration_support",
+      label: t("form.category.options.registration"),
+    },
+    { value: "technical_issue", label: t("form.category.options.technical") },
+    { value: "feedback", label: t("form.category.options.feedback") },
+  ];
+
   return (
     <section className='px-6 py-16 max-w-6xl mx-auto'>
-      <h1 className='text-4xl font-bold text-center mb-6'>Get in Touch</h1>
-      <p className='text-muted-foreground text-center mb-12'>
-        Need help with an order, have a question about our products, or want to
-        request support? Fill out the form or reach us via the details below.
-        Our team replies within 1 business day.
+      <h1 className='text-4xl font-bold text-center mb-6'>{t("title")}</h1>
+      <p className='text-muted-foreground text-center mb-12 max-w-3xl mx-auto'>
+        {t("description")}
       </p>
 
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
         {/* Left Column: Contact Details & FAQs */}
         <div className='space-y-8'>
           <div>
-            <h2 className='text-2xl font-semibold mb-2'>Customer Support</h2>
-            <ul className='space-y-2 text-gray-700'>
-              <li className='flex items-center space-x-2'>
+            <h2 className='text-2xl font-semibold mb-4'>
+              {t("details.title")}
+            </h2>
+            <ul className='space-y-3 text-gray-700'>
+              <li className='flex items-center space-x-3'>
                 <Phone className='w-5 h-5 text-primary' />
-                <span>Phone:</span>
+                <span>{t("details.phoneLabel")}:</span>
                 <a
-                  href='tel:+966530014707'
+                  href='tel:+966920000000'
                   className='text-primary hover:underline'
+                  dir='ltr'
                 >
-                  +966 53 001 4707
+                  {t("details.phone")}
                 </a>
               </li>
-              <li className='flex items-center space-x-2'>
+              <li className='flex items-center space-x-3'>
                 <Mail className='w-5 h-5 text-primary' />
-                <span>Email:</span>
+                <span>{t("details.emailLabel")}:</span>
                 <a
-                  href='mailto:marsos@marsos.com'
+                  href={`mailto:${t("details.email")}`}
                   className='text-primary hover:underline'
                 >
-                  marsos@marsos.sa
+                  {t("details.email")}
                 </a>
               </li>
-              <li className='flex items-center space-x-2'>
+              <li className='flex items-center space-x-3'>
                 <MapPin className='w-5 h-5 text-primary' />
-                <span>Address: 7253 Al Rayan, Rabwa, Riyadh, KSA</span>
+                <span>{t("details.address")}</span>
               </li>
-              <li className='flex items-center space-x-2'>
+              <li className='flex items-center space-x-3'>
                 <Clock className='w-5 h-5 text-primary' />
-                <span>Hours: Mon–Thu, 9 AM–6 PM (GMT+3)</span>
+                <span>{t("details.hours")}</span>
               </li>
             </ul>
           </div>
 
           <div>
-            <h2 className='text-2xl font-semibold mb-2'>FAQs</h2>
-            <ul className='list-disc list-inside text-gray-700 space-y-1'>
+            <h2 className='text-2xl font-semibold mb-4'>{t("faq.title")}</h2>
+            <ul className='list-disc list-inside text-gray-700 space-y-2'>
               <li>
-                <Link href='/' className='text-primary hover:underline'>
-                  Shipping Information
+                <Link
+                  href='/faq#supplier-registration'
+                  className='text-primary hover:underline'
+                >
+                  {t("faq.registration")}
                 </Link>
               </li>
               <li>
-                <Link href='/' className='text-primary hover:underline'>
-                  Payment Options
+                <Link
+                  href='/faq#tendering-process'
+                  className='text-primary hover:underline'
+                >
+                  {t("faq.tendering")}
                 </Link>
               </li>
               <li>
-                <Link href='/' className='text-primary hover:underline'>
-                  Return Policy
+                <Link
+                  href='/faq#technical-support'
+                  className='text-primary hover:underline'
+                >
+                  {t("faq.technical")}
                 </Link>
               </li>
               <li>
-                <Link href='/' className='text-primary hover:underline'>
-                  Product Support
+                <Link
+                  href='/faq'
+                  className='text-primary hover:underline font-semibold'
+                >
+                  {t("faq.viewAll")}
                 </Link>
               </li>
             </ul>
@@ -162,6 +199,7 @@ export default function ContactPage() {
           className='space-y-6 bg-white p-8 rounded-lg shadow-md'
           aria-label='Contact form'
         >
+          {/* Honeypot field for spam prevention */}
           <input
             type='text'
             name='honeypot'
@@ -171,83 +209,87 @@ export default function ContactPage() {
             autoComplete='off'
           />
 
-          <div>
-            <Label htmlFor='name'>Name</Label>
-            <Input
-              id='name'
-              name='name'
-              type='text'
-              required
-              value={formData.name}
-              onChange={handleChange}
-              placeholder='Your full name'
-              className='mt-1'
-            />
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
+            <div className='sm:col-span-1'>
+              <Label htmlFor='name'>{t("form.name.label")}</Label>
+              <Input
+                id='name'
+                name='name'
+                type='text'
+                required
+                value={formData.name}
+                onChange={handleChange}
+                placeholder={t("form.name.placeholder")}
+                className='mt-1'
+              />
+            </div>
+            <div className='sm:col-span-1'>
+              <Label htmlFor='email'>{t("form.email.label")}</Label>
+              <Input
+                id='email'
+                name='email'
+                type='email'
+                required
+                value={formData.email}
+                onChange={handleChange}
+                placeholder={t("form.email.placeholder")}
+                className='mt-1'
+              />
+            </div>
           </div>
 
           <div>
-            <Label htmlFor='email'>Email</Label>
-            <Input
-              id='email'
-              name='email'
-              type='email'
-              required
-              value={formData.email}
-              onChange={handleChange}
-              placeholder='you@example.com'
-              className='mt-1'
-            />
-          </div>
-
-          <div>
-            <Label htmlFor='category'>Category</Label>
+            <Label htmlFor='category'>{t("form.category.label")}</Label>
             <Select
               onValueChange={handleSelect}
               value={formData.category}
               name='category'
             >
               <SelectTrigger id='category' className='mt-1 w-full'>
-                <SelectValue placeholder='Select a category…' />
+                <SelectValue placeholder={t("form.category.placeholder")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='order'>Order Inquiry</SelectItem>
-                <SelectItem value='returns'>Returns & Exchanges</SelectItem>
-                <SelectItem value='product'>Product Question</SelectItem>
-                <SelectItem value='technical'>Technical Support</SelectItem>
-                <SelectItem value='other'>Other</SelectItem>
+                {inquiryCategories.map((cat) => (
+                  <SelectItem key={cat.value} value={cat.value}>
+                    {cat.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
 
-          <div>
-            <Label htmlFor='subject'>Subject</Label>
-            <Input
-              id='subject'
-              name='subject'
-              type='text'
-              required
-              value={formData.subject}
-              onChange={handleChange}
-              placeholder='Brief summary of your request'
-              className='mt-1'
-            />
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
+            <div>
+              <Label htmlFor='subject'>{t("form.subject.label")}</Label>
+              <Input
+                id='subject'
+                name='subject'
+                type='text'
+                required
+                value={formData.subject}
+                onChange={handleChange}
+                placeholder={t("form.subject.placeholder")}
+                className='mt-1'
+              />
+            </div>
+            <div>
+              <Label htmlFor='tenderNumber'>
+                {t("form.tenderNumber.label")}
+              </Label>
+              <Input
+                id='tenderNumber'
+                name='tenderNumber'
+                type='text'
+                value={formData.tenderNumber}
+                onChange={handleChange}
+                placeholder={t("form.tenderNumber.placeholder")}
+                className='mt-1'
+              />
+            </div>
           </div>
 
           <div>
-            <Label htmlFor='orderNumber'>Order Number (optional)</Label>
-            <Input
-              id='orderNumber'
-              name='orderNumber'
-              type='text'
-              value={formData.orderNumber}
-              onChange={handleChange}
-              placeholder='e.g., #MS-12345'
-              className='mt-1'
-            />
-          </div>
-
-          <div>
-            <Label htmlFor='message'>Message</Label>
+            <Label htmlFor='message'>{t("form.message.label")}</Label>
             <Textarea
               id='message'
               name='message'
@@ -255,7 +297,7 @@ export default function ContactPage() {
               required
               value={formData.message}
               onChange={handleChange}
-              placeholder='Describe your issue or question…'
+              placeholder={t("form.message.placeholder")}
               className='mt-1'
             />
           </div>
@@ -265,7 +307,9 @@ export default function ContactPage() {
             disabled={status === "submitting"}
             className='w-full bg-primary text-white py-3 rounded-lg hover:bg-primary/90 transition'
           >
-            {status === "submitting" ? "Sending…" : "Send Message"}
+            {status === "submitting"
+              ? t("form.button.submitting")
+              : t("form.button.submit")}
           </Button>
         </form>
       </div>
