@@ -17,7 +17,7 @@ export default function AdminLoginPage() {
     setLoading(true);
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
-      if (user.email !== "marsos@ayn-almanal.com") {
+      if (user.email !== "rdasho11@gmail.com") {
         toast.error("Access denied: Not an admin account");
         setLoading(false);
         return;

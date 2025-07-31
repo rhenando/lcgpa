@@ -7,28 +7,31 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }) {
   const { locale } = await params;
 
+  // --- UPDATE THIS SECTION ---
+  // Replace the placeholder domain and text with your project's actual details.
+  const domain = "https://your-lcgpa-domain.com";
+
   // Localized meta data
   const meta =
     locale === "ar"
       ? {
-          title: "مرصوص | منصة مرصوص لخدمات التسويق الصناعي و التحول الرقمي",
+          title: "هيئة المحتوى المحلي والمشتريات الحكومية | LCGPA",
           description:
-            "مرصوص – اكتشف أفضل المنتجات الصناعية من المصانع السعودية مباشرة بجودة عالية وأسعار منافسة لقطاع الاعمال.",
+            "موقع هيئة المحتوى المحلي والمشتريات الحكومية الرسمي. تعرف على مبادراتنا وخدماتنا لتعزيز المحتوى المحلي في المملكة.",
           keywords:
-            "مرصوص, صنع في السعودية, المصانع السعوية, الموردون, منتجات المملكة العربية السعودية, المنتجات السعودية بالجملة, سعر المصنع",
-          url: "https://marsos.sa/ar",
-          ogImage: "https://marsos.sa/og-image-ar.png",
+            "المحتوى المحلي, المشتريات الحكومية, صنع في السعودية, LCGPA, رؤية 2030",
+          url: `${domain}/ar`,
+          ogImage: `${domain}/og-image-ar.png`, // You need to create this image
           ogLocale: "ar-SA",
         }
       : {
-          title:
-            "Marsos | Marsos SA for Saudi Industrial Marketing and Digital Transformation",
+          title: "Local Content & Government Procurement Authority | LCGPA",
           description:
-            "Marsos – Discover top Saudi industrial products on Marsos with premium quality and competitive prices from the kingdom of Saudi Arabia.",
+            "The official website for the Local Content & Government Procurement Authority. Learn about our initiatives and services to enhance local content in the Kingdom.",
           keywords:
-            "Saudi manufactured products, Made in Saudi Arabia, Saudi manufacturers, Saudi suppliers, Saudi Arabia products, Wholesale Saudi products, Local Saudi products",
-          url: "https://marsos.sa/en",
-          ogImage: "https://marsos.sa/og-image-en.png",
+            "Local Content, Government Procurement, Made in Saudi, LCGPA, Vision 2030",
+          url: `${domain}/en`,
+          ogImage: `${domain}/og-image-en.png`, // You need to create this image
           ogLocale: "en-US",
         };
 
@@ -39,8 +42,8 @@ export async function generateMetadata({ params }) {
     alternates: {
       canonical: meta.url,
       languages: {
-        ar: "https://marsos.sa/ar",
-        en: "https://marsos.sa/en",
+        ar: `${domain}/ar`,
+        en: `${domain}/en`,
       },
     },
     openGraph: {
