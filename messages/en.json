@@ -352,11 +352,12 @@
         "supplier": "Supplier"
       },
       "welcome": {
-        "title": "Welcome to Marsos",
-        "subtitle": "Your gateway to seamless supplier and buyer experiences."
+        "title": "One Final Step",
+        "subtitle": "Defining your role helps us tailor the portal experience to your specific needs."
       }
     }
   },
+
   "supplier": {
     "welcome": {
       "title": "Supplier Onboarding"
