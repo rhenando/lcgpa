@@ -55,7 +55,7 @@ export default function CategoryCarousel() {
   return (
     <section className='bg-emerald-50'>
       {/* Main container with relative positioning for the buttons */}
-      <div className='container mx-auto py-3 relative'>
+      <div className='container mx-auto  relative'>
         {/* The Embla Carousel viewport */}
         <div className='overflow-hidden' ref={emblaRef}>
           {/* The Embla Carousel container */}
