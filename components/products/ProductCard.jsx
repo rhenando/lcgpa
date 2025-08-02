@@ -52,7 +52,7 @@ export default function ProductCard({ product }) {
               </span>
             ))
           ) : (
-            <span>Factory info not available</span>
+            <span>No Supplier Data Available</span>
           )}
         </p>
         <p className='mt-2 text-sm text-gray-600 line-clamp-2'>
