@@ -291,7 +291,7 @@ export default function ProductDetailsPage({ product }) {
                     Price Ceiling:
                   </span>
                   <span className='text-gray-900 text-sm sm:text-base'>
-                    {product.priceCeiling} SAR
+                    {product.priceCeiling} Pc/s
                   </span>
                 </div>
                 {product.localContentCertificate && (

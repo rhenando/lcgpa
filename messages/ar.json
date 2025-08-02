@@ -1,0 +1,84 @@
+{
+  "navigation": {
+    "home": "الرئيسية",
+    "products": "المنتجات",
+    "suppliers": "الموردين",
+    "rfq": "طلب عرض سعر",
+    "cart": "السلة",
+    "location": "الموقع",
+    "search": "بحث",
+    "toggleMenu": "فتح القائمة"
+  },
+  "hero": {
+    "slide1": {
+      "title": "تمكين التجارة المحلية",
+      "description": "منتجات عالية الجودة تدعم صناعتنا الوطنية. مستوحاة من رؤية 2030.",
+      "buttonText": "تسوق جميع المنتجات"
+    },
+    "slide2": {
+      "title": "انضم إلى الحركة الوطنية",
+      "description": "اكتشف كيف يمكن لعملك أن يساهم ويستفيد.",
+      "buttonText": "تعلم كيف"
+    },
+    "categoriesTitle": "الفئات"
+  },
+  "categories": {
+    "paperconsumerproducts": "منتجات ورقية استهلاكية",
+    "industrialequipment": "المعدات الصناعية",
+    "electronics": "الإلكترونيات",
+    "automotive": "السيارات",
+    "construction": "البناء",
+    "machinery": "الآلات",
+    "tools": "الأدوات",
+    "safety": "معدات السلامة",
+    "medical": "طبية",
+    "chemicals": "الكيماويات"
+  },
+  "home": {
+    "title": "مرحباً بكم في LCGPA",
+    "subtitle": "شريككم الموثوق في المشتريات الصناعية",
+    "featuredProducts": "المنتجات المميزة"
+  },
+  "product": {
+    "details": "تفاصيل المنتج",
+    "specifications": "المواصفات",
+    "price": "السعر",
+    "availability": "التوفر",
+    "supplier": "المورد",
+    "requestQuote": "طلب عرض سعر",
+    "productCode": "كود المنتج",
+    "soldBy": "يباع بواسطة",
+    "noSupplierData": "لا توجد بيانات مورد متاحة",
+    "adjustableRange": "نطاق قابل للتعديل",
+    "viewDetails": "عرض تفاصيل المنتج"
+  },
+  "rfq": {
+    "title": "طلب عرض سعر",
+    "form": {
+      "productName": "اسم المنتج",
+      "quantity": "الكمية",
+      "description": "الوصف",
+      "contactInfo": "معلومات الاتصال",
+      "submit": "إرسال الطلب"
+    }
+  },
+  "supplier": {
+    "profile": "ملف المورد",
+    "products": "المنتجات",
+    "contact": "معلومات الاتصال",
+    "rating": "التقييم"
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ",
+    "retry": "إعادة المحاولة",
+    "submit": "إرسال",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "search": "بحث",
+    "filter": "تصفية",
+    "sort": "ترتيب"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "navigation": {
+    "home": "Home",
+    "products": "Products",
+    "suppliers": "Suppliers",
+    "rfq": "Request for Quotation",
+    "cart": "Cart",
+    "location": "Location",
+    "search": "Search",
+    "toggleMenu": "Toggle Menu"
+  },
+  "hero": {
+    "slide1": {
+      "title": "Empowering Local Commerce",
+      "description": "Quality products that support our national industry. Inspired by Vision 2030.",
+      "buttonText": "Shop All Products"
+    },
+    "slide2": {
+      "title": "Join the National Movement",
+      "description": "Discover how your business can contribute and benefit.",
+      "buttonText": "Learn How"
+    },
+    "categoriesTitle": "Categories"
+  },
+  "categories": {
+    "electronics": "Electronics",
+    "industrial": "Industrial",
+    "automotive": "Automotive",
+    "construction": "Construction",
+    "machinery": "Machinery",
+    "tools": "Tools",
+    "safety": "Safety Equipment",
+    "medical": "Medical",
+    "chemicals": "Chemicals",
+    "textiles": "Textiles"
+  },
+  "home": {
+    "title": "Welcome to LCGPA",
+    "subtitle": "Your trusted partner for industrial procurement",
+    "featuredProducts": "Featured Products",
+    "hero": {
+      "title": "Find Quality Products",
+      "description": "Browse our extensive catalog of industrial products and connect with trusted suppliers.",
+      "cta": "Explore Products"
+    }
+  },
+  "product": {
+    "details": "Product Details",
+    "specifications": "Specifications",
+    "price": "Price",
+    "availability": "Availability",
+    "supplier": "Supplier",
+    "requestQuote": "Request Quote",
+    "productCode": "Product Code",
+    "soldBy": "Sold by",
+    "noSupplierData": "No Supplier Data Available",
+    "adjustableRange": "Adjustable Range",
+    "viewDetails": "View Product Details"
+  },
+  "rfq": {
+    "title": "Request for Quote",
+    "form": {
+      "productName": "Product Name",
+      "quantity": "Quantity",
+      "description": "Description",
+      "contactInfo": "Contact Information",
+      "submit": "Submit Request"
+    }
+  },
+  "supplier": {
+    "profile": "Supplier Profile",
+    "products": "Products",
+    "contact": "Contact Information",
+    "rating": "Rating"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort"
+  }
+}

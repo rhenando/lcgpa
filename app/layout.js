@@ -1,13 +1,19 @@
-// app/layout.js (Updated with IBM Plex Sans font)
-import { IBM_Plex_Sans } from "next/font/google"; // 1. Changed the font import
+// app/layout.js
+import { IBM_Plex_Sans, IBM_Plex_Sans_Arabic } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 
-// 2. Configured IBM Plex Sans instead of Poppins
+// Configure IBM Plex Sans for Latin text
 const ibm_plex_sans = IBM_Plex_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"], // '500' is Medium weight
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-ibm-plex-sans",
+});
+
+// Configure IBM Plex Sans Arabic for Arabic text
+const ibm_plex_sans_arabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-ibm-plex-sans-arabic",
 });
 
 export const metadata = {
@@ -20,16 +26,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang='en'>
-      <body
-        // 3. Applied the new font's className to the body
-        className={`${ibm_plex_sans.className} flex flex-col min-h-screen bg-gray-50`}
-      >
-        <Header />
-        <main className='flex-grow container mx-auto px-4 py-8'>
-          {children}
-        </main>
-        <Footer />
+    <html
+      className={`${ibm_plex_sans.variable} ${ibm_plex_sans_arabic.variable}`}
+      suppressHydrationWarning
+    >
+      <body className='font-sans' suppressHydrationWarning>
+        {children}
       </body>
     </html>
   );

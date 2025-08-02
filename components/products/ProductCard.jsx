@@ -6,11 +6,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useTranslations, useLocale } from "next-intl";
+import { Link } from "../../i18n/routing";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function ProductCard({ product }) {
-  // The `factoryNames` constant is no longer needed as we map directly.
+  const t = useTranslations("product");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
 
   const breadcrumbs = [
     product.sectorName,
@@ -32,12 +36,30 @@ export default function ProductCard({ product }) {
         </div>
       </CardHeader>
       <CardContent className='flex-grow'>
-        <CardTitle className='text-lg font-semibold'>{product.name}</CardTitle>
-        <p className='text-sm text-gray-500'>
-          Product Code: {product.productCode}
+        <CardTitle
+          className={`text-lg font-semibold ${
+            isRTL ? "text-right" : "text-left"
+          }`}
+        >
+          {product.name}
+        </CardTitle>
+        <p
+          className={`text-sm text-gray-500 ${
+            isRTL ? "text-right" : "text-left"
+          }`}
+        >
+          {t("productCode") ||
+            (locale === "ar" ? "كود المنتج" : "Product Code")}
+          : {product.productCode}
         </p>
-        <p className='text-sm font-medium text-gray-700 mt-1'>
-          <span className='font-semibold'>Sold by:</span>{" "}
+        <p
+          className={`text-sm font-medium text-gray-700 mt-1 ${
+            isRTL ? "text-right" : "text-left"
+          }`}
+        >
+          <span className='font-semibold'>
+            {t("soldBy") || (locale === "ar" ? "يباع بواسطة" : "Sold by")}:
+          </span>{" "}
           {/* This block is updated to map over factories */}
           {product.factories && product.factories.length > 0 ? (
             product.factories.map((factory, index) => (
@@ -52,29 +74,49 @@ export default function ProductCard({ product }) {
               </span>
             ))
           ) : (
-            <span>No Supplier Data Available</span>
+            <span>
+              {t("noSupplierData") ||
+                (locale === "ar"
+                  ? "لا توجد بيانات مورد متاحة"
+                  : "No Supplier Data Available")}
+            </span>
           )}
         </p>
-        <p className='mt-2 text-sm text-gray-600 line-clamp-2'>
+        <p
+          className={`mt-2 text-sm text-gray-600 line-clamp-2 ${
+            isRTL ? "text-right" : "text-left"
+          }`}
+        >
           {product.definition}
         </p>
       </CardContent>
       <CardFooter className='flex flex-col items-start gap-4 pt-4'>
-        <div>
+        <div className={isRTL ? "text-right w-full" : "text-left w-full"}>
           <p className='text-xl font-bold text-brand-green'>
-            0 - {product.priceCeiling} Pc/s
+            {isRTL
+              ? `${product.priceCeiling} - 0 قطعة/ق`
+              : `0 - ${product.priceCeiling} Pc/s`}
           </p>
-          <p className='text-xs text-gray-500'>Aqustiable Range</p>
+          <p className='text-xs text-gray-500'>
+            {t("adjustableRange") ||
+              (locale === "ar" ? "نطاق قابل للتعديل" : "Adjustable Range")}
+          </p>
         </div>
 
         <div className='w-full flex flex-col gap-2'>
-          <Button className='w-full'>Request a Quotation</Button>
+          <Button className='w-full'>
+            {t("requestQuote") ||
+              (locale === "ar" ? "طلب عرض سعر" : "Request a Quotation")}
+          </Button>
           <Link href={`/product/${product.id}`} className='w-full'>
             <Button
               variant='outline'
               className='w-full border-brand-green text-brand-green hover:bg-brand-green hover:text-white transition-colors'
             >
-              View Product Details
+              {t("viewDetails") ||
+                (locale === "ar"
+                  ? "عرض تفاصيل المنتج"
+                  : "View Product Details")}
             </Button>
           </Link>
         </div>

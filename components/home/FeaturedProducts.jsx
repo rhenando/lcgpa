@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useTranslations, useLocale } from "next-intl";
 import ProductCard from "@/components/products/ProductCard";
 import { featuredProducts } from "@/lib/mock-data";
 
-// 1. Import the core hook and the autoplay plugin
+// Import the core hook and the autoplay plugin
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
@@ -27,20 +28,55 @@ const CaretIcon = () => (
 );
 
 export default function FeaturedProducts() {
+  const t = useTranslations("home");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+
+  // --- Load appropriate mock data based on locale ---
+  const [localizedProducts, setLocalizedProducts] = useState(featuredProducts);
+
+  useEffect(() => {
+    const loadLocalizedData = async () => {
+      if (locale === "ar") {
+        try {
+          const { featuredProducts: arabicProducts } = await import(
+            "@/lib/mock-data-ar"
+          );
+          setLocalizedProducts(arabicProducts);
+        } catch (error) {
+          console.log("Arabic mock data not found, using default");
+          setLocalizedProducts(featuredProducts);
+        }
+      } else {
+        setLocalizedProducts(featuredProducts);
+      }
+    };
+
+    loadLocalizedData();
+  }, [locale]);
+
   const uniqueCategories = [
-    "All",
-    ...new Set(featuredProducts.map((product) => product.category)),
+    locale === "ar" ? "الكل" : "All",
+    ...new Set(localizedProducts.map((product) => product.category)),
   ];
 
-  const [activeFilter, setActiveFilter] = useState("All");
+  const [activeFilter, setActiveFilter] = useState(
+    locale === "ar" ? "الكل" : "All"
+  );
 
-  // 2. Initialize the hook with the Autoplay plugin
+  // Update active filter when locale changes
+  useEffect(() => {
+    setActiveFilter(locale === "ar" ? "الكل" : "All");
+  }, [locale]);
+
+  // Initialize the hook with the Autoplay plugin and RTL support
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       align: "start",
-      loop: true, // Looping is recommended for autoplay
+      loop: true,
+      direction: isRTL ? "rtl" : "ltr",
     },
-    [Autoplay({ delay: 4000, stopOnInteraction: true })] // Autoplays every 4 seconds
+    [Autoplay({ delay: 4000, stopOnInteraction: true })]
   );
 
   // --- State for navigation buttons ---
@@ -72,10 +108,10 @@ export default function FeaturedProducts() {
     () => emblaApi && emblaApi.scrollNext(),
     [emblaApi]
   );
-  // --- End of navigation logic ---
 
-  const filteredProducts = featuredProducts.filter((product) => {
-    if (activeFilter === "All") {
+  const filteredProducts = localizedProducts.filter((product) => {
+    const allCategory = locale === "ar" ? "الكل" : "All";
+    if (activeFilter === allCategory) {
       return true;
     }
     return product.category === activeFilter;
@@ -83,15 +119,32 @@ export default function FeaturedProducts() {
 
   return (
     <section className='py-16 sm:py-24'>
-      <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between'>
-        <h2 className='text-left text-3xl font-bold tracking-tight text-gray-900 shrink-0'>
-          Featured Products
+      <div
+        className={`flex flex-col sm:flex-row sm:items-center sm:justify-between ${
+          isRTL ? "sm:flex-row-reverse" : ""
+        }`}
+      >
+        <h2
+          className={`text-3xl font-bold tracking-tight text-gray-900 shrink-0 ${
+            isRTL ? "text-right" : "text-left"
+          }`}
+        >
+          {t("featuredProducts") ||
+            (locale === "ar" ? "المنتجات المميزة" : "Featured Products")}
         </h2>
 
-        {/* 3. Wrap the carousel in a relative container to position the buttons */}
-        <div className='relative mt-6 sm:mt-0 sm:ml-6 w-full max-w-xl'>
+        {/* Wrap the carousel in a relative container with RTL support */}
+        <div
+          className={`relative mt-6 sm:mt-0 w-full max-w-xl ${
+            isRTL ? "sm:mr-6" : "sm:ml-6"
+          }`}
+        >
           <div className='embla overflow-hidden' ref={emblaRef}>
-            <div className='embla__container flex gap-x-3'>
+            <div
+              className={`embla__container flex ${
+                isRTL ? "gap-x-reverse gap-x-3" : "gap-x-3"
+              }`}
+            >
               {uniqueCategories.map((category, index) => (
                 <div
                   key={index}
@@ -112,24 +165,30 @@ export default function FeaturedProducts() {
             </div>
           </div>
 
-          {/* 4. Add the navigation buttons (carets) */}
+          {/* Navigation buttons with RTL support */}
           <button
-            className='absolute top-1/2 left-0 -translate-y-1/2 -translate-x-12 p-2 rounded-full bg-white shadow-md disabled:opacity-30'
-            onClick={scrollPrev}
-            disabled={!canScrollPrev}
+            className={`absolute top-1/2 -translate-y-1/2 p-2 rounded-full bg-white shadow-md disabled:opacity-30 ${
+              isRTL ? "right-0 translate-x-12" : "left-0 -translate-x-12"
+            }`}
+            onClick={isRTL ? scrollNext : scrollPrev}
+            disabled={isRTL ? !canScrollNext : !canScrollPrev}
           >
-            <span className='sr-only'>Previous</span>
-            <div className='rotate-180'>
+            <span className='sr-only'>{isRTL ? "التالي" : "Previous"}</span>
+            <div className={isRTL ? "" : "rotate-180"}>
               <CaretIcon />
             </div>
           </button>
           <button
-            className='absolute top-1/2 right-0 -translate-y-1/2 translate-x-12 p-2 rounded-full bg-white shadow-md disabled:opacity-30'
-            onClick={scrollNext}
-            disabled={!canScrollNext}
+            className={`absolute top-1/2 -translate-y-1/2 p-2 rounded-full bg-white shadow-md disabled:opacity-30 ${
+              isRTL ? "left-0 -translate-x-12" : "right-0 translate-x-12"
+            }`}
+            onClick={isRTL ? scrollPrev : scrollNext}
+            disabled={isRTL ? !canScrollPrev : !canScrollNext}
           >
-            <span className='sr-only'>Next</span>
-            <CaretIcon />
+            <span className='sr-only'>{isRTL ? "السابق" : "Next"}</span>
+            <div className={isRTL ? "rotate-180" : ""}>
+              <CaretIcon />
+            </div>
           </button>
         </div>
       </div>
