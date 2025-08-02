@@ -10,7 +10,7 @@ import { featuredProducts } from "@/lib/mock-data";
 
 /**
  * A responsive carousel component that shows category links on desktop
- * and call-to-action buttons on mobile.
+ * and a call-to-action button on mobile.
  */
 export default function CategoryCarousel() {
   // --- Carousel Logic (for desktop) ---
@@ -85,19 +85,16 @@ export default function CategoryCarousel() {
         </button>
       </div>
 
-      {/* --- Mobile Buttons (Visible below md screens) --- */}
+      {/* --- Mobile Button (Visible below md screens) --- */}
       <div className='md:hidden container mx-auto p-4'>
-        <div className='flex gap-2 sm:gap-3'>
-          {/* --- MODIFICATION --- */}
-          {/* Removed size="lg" and added responsive text and padding classes */}
-          <Button className='flex-1 bg-brand-green text-white hover:bg-brand-green/90 font-semibold h-11 rounded-md text-xs sm:text-sm px-3'>
-            Request a Quotation
-          </Button>
+        {/* --- MODIFICATION --- */}
+        {/* Removed the second button and made the first one full-width */}
+        <div className='flex'>
           <Button
-            variant='outline'
-            className='flex-1 border-brand-green text-brand-green hover:bg-brand-green/5 font-semibold h-11 rounded-md text-xs sm:text-sm px-3'
+            size='lg'
+            className='w-full bg-brand-green text-white hover:bg-brand-green/90 font-semibold'
           >
-            Import from Saudi
+            Request a Quotation
           </Button>
         </div>
       </div>

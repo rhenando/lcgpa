@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 
 const navItems = [
   { href: "/quote", icon: FileText, label: "Request for Quotation" },
-  { href: "/import", icon: FileText, label: "Import from Saudi" },
   { href: "/cart", icon: ShoppingCart, label: "Cart" },
   { href: "/location", icon: MapPin, label: "Location" },
 ];
