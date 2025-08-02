@@ -7,19 +7,19 @@ import { featuredProducts } from "@/lib/mock-data";
 export default function FeaturedProducts() {
   const [activeFilter, setActiveFilter] = useState("All");
 
-  // CHANGED: Use "Sector Code" as the filter name
-  const filters = ["All", "Sector Code", "Product Code"];
+  // 1. Changed the filters to "All", "Category", and "Subcategory"
+  const filters = ["All", "Category", "Subcategory"];
 
+  // 2. Updated the filtering logic to match the new filters
   const filteredProducts = featuredProducts.filter((product) => {
     if (activeFilter === "All") {
-      return true;
+      return true; // Show all products
     }
-    // CHANGED: Logic now checks for 'sectorCode'
-    if (activeFilter === "Sector Code") {
-      return Boolean(product.sectorCode);
+    if (activeFilter === "Category") {
+      return Boolean(product.category); // Show products that have a category
     }
-    if (activeFilter === "Product Code") {
-      return Boolean(product.productCode);
+    if (activeFilter === "Subcategory") {
+      return Boolean(product.subcategory); // Show products that have a subcategory
     }
     return false;
   });
