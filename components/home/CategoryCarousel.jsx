@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-// 1. Import the core Embla Carousel hook and the Autoplay plugin
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -10,24 +9,22 @@ import { Button } from "@/components/ui/button";
 import { featuredProducts } from "@/lib/mock-data";
 
 /**
- * An auto-sliding and fully responsive carousel for product categories,
- * using the standalone embla-carousel-react library.
- * NOTE: This component requires `embla-carousel-react` and `embla-carousel-autoplay`.
+ * A responsive carousel component that shows category links on desktop
+ * and call-to-action buttons on mobile.
  */
 export default function CategoryCarousel() {
+  // --- Carousel Logic (for desktop) ---
   const categories = React.useMemo(() => {
     return [
       ...new Set(featuredProducts.map((p) => p.category).filter(Boolean)),
     ];
   }, []);
 
-  // 2. Set up the Embla Carousel hook with the Autoplay plugin
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, align: "start" },
     [Autoplay({ delay: 3000, stopOnInteraction: true, stopOnMouseEnter: true })]
   );
 
-  // State for controlling the custom navigation buttons
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
 
@@ -40,7 +37,6 @@ export default function CategoryCarousel() {
     [emblaApi]
   );
 
-  // Update button states when the carousel selection changes
   useEffect(() => {
     if (!emblaApi) return;
     const onSelect = () => {
@@ -49,19 +45,16 @@ export default function CategoryCarousel() {
     };
     emblaApi.on("select", onSelect);
     emblaApi.on("reInit", onSelect);
-    onSelect(); // Set initial state
+    onSelect();
   }, [emblaApi]);
 
   return (
     <section className='bg-emerald-50'>
-      {/* Main container with relative positioning for the buttons */}
-      <div className='container mx-auto  relative'>
-        {/* The Embla Carousel viewport */}
+      {/* --- Desktop Carousel (Visible on md screens and up) --- */}
+      <div className='hidden md:block container mx-auto py-3 relative px-12'>
         <div className='overflow-hidden' ref={emblaRef}>
-          {/* The Embla Carousel container */}
           <div className='flex -ml-2'>
             {categories.map((category) => (
-              // Each slide in the carousel
               <div
                 className='flex-shrink-0 flex-grow-0 basis-auto pl-2'
                 key={category}
@@ -76,24 +69,37 @@ export default function CategoryCarousel() {
             ))}
           </div>
         </div>
-
-        {/* --- MODIFICATION --- */}
-        {/* Adjusted button positioning to prevent overlap with text */}
         <button
           onClick={scrollPrev}
           disabled={prevBtnDisabled}
-          className='absolute top-1/2 -translate-y-1/2 -left-4 z-10 hidden sm:flex items-center justify-center h-10 w-10 rounded-full bg-white/80 hover:bg-white border border-emerald-200 text-emerald-900 disabled:opacity-50 transition'
+          className='absolute top-1/2 -translate-y-1/2 left-0 z-10 flex items-center justify-center h-10 w-10 rounded-full bg-white/80 hover:bg-white border border-emerald-200 text-emerald-900 disabled:opacity-50 transition'
         >
           <ChevronLeft className='h-5 w-5' />
         </button>
         <button
           onClick={scrollNext}
           disabled={nextBtnDisabled}
-          className='absolute top-1/2 -translate-y-1/2 -right-4 z-10 hidden sm:flex items-center justify-center h-10 w-10 rounded-full bg-white/80 hover:bg-white border border-emerald-200 text-emerald-900 disabled:opacity-50 transition'
+          className='absolute top-1/2 -translate-y-1/2 right-0 z-10 flex items-center justify-center h-10 w-10 rounded-full bg-white/80 hover:bg-white border border-emerald-200 text-emerald-900 disabled:opacity-50 transition'
         >
           <ChevronRight className='h-5 w-5' />
         </button>
-        {/* --- END MODIFICATION --- */}
+      </div>
+
+      {/* --- Mobile Buttons (Visible below md screens) --- */}
+      <div className='md:hidden container mx-auto p-4'>
+        <div className='flex gap-2 sm:gap-3'>
+          {/* --- MODIFICATION --- */}
+          {/* Removed size="lg" and added responsive text and padding classes */}
+          <Button className='flex-1 bg-brand-green text-white hover:bg-brand-green/90 font-semibold h-11 rounded-md text-xs sm:text-sm px-3'>
+            Request a Quotation
+          </Button>
+          <Button
+            variant='outline'
+            className='flex-1 border-brand-green text-brand-green hover:bg-brand-green/5 font-semibold h-11 rounded-md text-xs sm:text-sm px-3'
+          >
+            Import from Saudi
+          </Button>
+        </div>
       </div>
     </section>
   );
