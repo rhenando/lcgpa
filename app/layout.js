@@ -1,5 +1,4 @@
 // app/layout.js (Updated with IBM Plex Sans font)
-
 import { IBM_Plex_Sans } from "next/font/google"; // 1. Changed the font import
 import "./globals.css";
 import Header from "@/components/layout/Header";
@@ -12,6 +11,9 @@ const ibm_plex_sans = IBM_Plex_Sans({
 });
 
 export const metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+  ),
   title: "LCGPA Store",
   description: "E-commerce platform inspired by LCGPA",
 };

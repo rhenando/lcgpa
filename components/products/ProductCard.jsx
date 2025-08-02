@@ -7,15 +7,11 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ProductCard({ product }) {
-  const factoryNames =
-    product.factories && product.factories.length > 0
-      ? product.factories.map((factory) => factory.name).join(", ")
-      : "Factory info not available";
+  // The `factoryNames` constant is no longer needed as we map directly.
 
-  // This constant is defined but not used in the JSX.
-  // You could use it to render breadcrumbs if needed.
   const breadcrumbs = [
     product.sectorName,
     product.category,
@@ -41,9 +37,24 @@ export default function ProductCard({ product }) {
           Product Code: {product.productCode}
         </p>
         <p className='text-sm font-medium text-gray-700 mt-1'>
-          <span className='font-semibold'>Sold by:</span> {factoryNames}
+          <span className='font-semibold'>Sold by:</span>{" "}
+          {/* This block is updated to map over factories */}
+          {product.factories && product.factories.length > 0 ? (
+            product.factories.map((factory, index) => (
+              <span key={factory.id}>
+                <Link
+                  href={`/supplier/${factory.id}`}
+                  className='text-brand-green hover:underline'
+                >
+                  {factory.name}
+                </Link>
+                {index < product.factories.length - 1 && ", "}
+              </span>
+            ))
+          ) : (
+            <span>Factory info not available</span>
+          )}
         </p>
-        {/* 1. Truncated the definition to 2 lines */}
         <p className='mt-2 text-sm text-gray-600 line-clamp-2'>
           {product.definition}
         </p>
@@ -56,16 +67,16 @@ export default function ProductCard({ product }) {
           <p className='text-xs text-gray-500'>Aqustiable Range</p>
         </div>
 
-        {/* 2. Added a container for the two buttons */}
         <div className='w-full flex flex-col gap-2'>
           <Button className='w-full'>Request a Quotation</Button>
-          {/* 3. Added brand color styling to the outline button */}
-          <Button
-            variant='outline'
-            className='w-full border-brand-green text-brand-green hover:bg-brand-green hover:text-white transition-colors'
-          >
-            View Product Details
-          </Button>
+          <Link href={`/product/${product.id}`} className='w-full'>
+            <Button
+              variant='outline'
+              className='w-full border-brand-green text-brand-green hover:bg-brand-green hover:text-white transition-colors'
+            >
+              View Product Details
+            </Button>
+          </Link>
         </div>
       </CardFooter>
     </Card>
