@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link"; // 1. Import the Link component
 
 import { Button } from "@/components/ui/button";
 import { featuredProducts } from "@/lib/mock-data";
@@ -87,15 +88,16 @@ export default function CategoryCarousel() {
 
       {/* --- Mobile Button (Visible below md screens) --- */}
       <div className='md:hidden container mx-auto p-4'>
-        {/* --- MODIFICATION --- */}
-        {/* Removed the second button and made the first one full-width */}
         <div className='flex'>
-          <Button
-            size='lg'
-            className='w-full bg-brand-green text-white hover:bg-brand-green/90 font-semibold'
-          >
-            Request a Quotation
-          </Button>
+          {/* 2. Wrap the Button with the Link component */}
+          <Link href='/rfq' className='w-full'>
+            <Button
+              size='lg'
+              className='w-full bg-brand-green text-white hover:bg-brand-green/90 font-semibold'
+            >
+              Request a Quotation
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
