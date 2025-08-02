@@ -15,11 +15,9 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db } from "@/firebase/config";
 import { toast } from "sonner";
 import clsx from "clsx";
-
-// 1. Removed next-intl imports and related logic
+import { featuredProducts } from "@/lib/mock-data"; // 1. Import mock data
 
 export default function RfqPage() {
-  // 2. Removed useTranslations and useLocale hooks. Using hardcoded strings instead.
   const reduxUser = {
     uid: "temp_user_id_123",
     displayName: "Guest User",
@@ -63,9 +61,7 @@ export default function RfqPage() {
   const [form, setForm] = useState(initialFormState);
   const [formErrors, setFormErrors] = useState({});
   const [categoryOptions, setCategoryOptions] = useState([]);
-  const [subcategoryOptions, setSubcategoryOptions] = useState([
-    { value: "Others", label: "Others" },
-  ]);
+  const [subcategoryOptions, setSubcategoryOptions] = useState([]); // Initialized as empty
   const [products, setProducts] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -157,24 +153,31 @@ export default function RfqPage() {
   };
 
   useEffect(() => {
-    const fetchProductsAndSuppliers = async () => {
+    const fetchData = async () => {
       try {
-        const productsSnap = await getDocs(collection(db, "products"));
-        const prods = [];
+        const prods = featuredProducts;
         const categoryMap = {};
-        productsSnap.forEach((docSnap) => {
-          const data = docSnap.data();
-          prods.push(data);
-          if (data.category && data.category.en) {
-            const catEn = data.category.en.trim();
-            if (!categoryMap[catEn]) categoryMap[catEn] = new Set();
-            if (data.subCategory && data.subCategory.en) {
-              categoryMap[catEn].add(data.subCategory.en.trim());
+        prods.forEach((product) => {
+          if (product.category) {
+            const cat = product.category.trim();
+            if (!categoryMap[cat]) categoryMap[cat] = new Set();
+            if (product.subcategory) {
+              categoryMap[cat].add(product.subcategory.trim());
             }
           }
         });
         setProducts(prods);
 
+        // Removed "Others" from category options
+        const cats = [
+          ...Object.keys(categoryMap)
+            .sort()
+            .map((cat) => ({ value: cat, label: cat })),
+        ];
+        setCategoryOptions(cats);
+        setSubcategoryOptions([]); // Start with no subcategories
+
+        // Still fetch suppliers from Firestore
         const suppliersSnap = await getDocs(collection(db, "users"));
         const suppliersList = [];
         suppliersSnap.forEach((docSnap) => {
@@ -184,53 +187,46 @@ export default function RfqPage() {
           }
         });
         setSuppliers(suppliersList);
-
-        const cats = [
-          ...Object.keys(categoryMap)
-            .sort()
-            .map((cat) => ({ value: cat, label: cat })),
-          { value: "Others", label: "Others" },
-        ];
-        setCategoryOptions(cats);
-        setSubcategoryOptions([{ value: "Others", label: "Others" }]);
       } catch (error) {
         console.error("Error fetching data:", error);
         toast.error("Failed to load data");
       }
     };
-    fetchProductsAndSuppliers();
+    fetchData();
   }, []);
 
+  // Effect to update subcategories when a category is selected
   useEffect(() => {
-    if (!form.category || form.category === "Others") {
-      setSubcategoryOptions([{ value: "Others", label: "Others" }]);
-      setForm((prev) => ({ ...prev, subcategory: "Others" }));
+    // Clear subcategories if no category is selected
+    if (!form.category) {
+      setSubcategoryOptions([]);
+      setForm((prev) => ({ ...prev, subcategory: "" }));
       return;
     }
-    if (products.length === 0) {
-      setSubcategoryOptions([{ value: "Others", label: "Others" }]);
-      setForm((prev) => ({ ...prev, subcategory: "Others" }));
-      return;
-    }
+
+    // Find all subcategories for the selected category
     const subcatSet = new Set();
     products.forEach((data) => {
       if (
-        data.category?.en?.trim().toLowerCase() ===
+        data.category?.trim().toLowerCase() ===
         form.category.trim().toLowerCase()
       ) {
-        if (data.subCategory?.en) {
-          subcatSet.add(data.subCategory.en.trim());
+        if (data.subcategory) {
+          subcatSet.add(data.subcategory.trim());
         }
       }
     });
+
+    // Create the options list for the dropdown, without "Others"
     const subs = [
       ...Array.from(subcatSet)
         .sort()
         .map((sub) => ({ value: sub, label: sub })),
-      { value: "Others", label: "Others" },
     ];
+
     setSubcategoryOptions(subs);
-    setForm((prev) => ({ ...prev, subcategory: "Others" }));
+    // Reset the selected subcategory in the form
+    setForm((prev) => ({ ...prev, subcategory: "" }));
   }, [form.category, products]);
 
   useEffect(() => {
@@ -335,7 +331,7 @@ export default function RfqPage() {
         products
           .filter(
             (p) =>
-              p.category?.en?.trim().toLowerCase() ===
+              p.category?.trim().toLowerCase() ===
                 form.category.trim().toLowerCase() && p.supplierId
           )
           .map((p) => p.supplierId)
