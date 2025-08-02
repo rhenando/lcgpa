@@ -8,9 +8,6 @@ import "keen-slider/keen-slider.min.css"; // Import the slider's CSS
 
 import { Button } from "@/components/ui/button";
 
-// --- Define your slide data here ---
-// You can populate this array with data from a CMS or API.
-// For the first slide, use the image you uploaded.
 const slides = [
   {
     id: 1,
@@ -18,14 +15,14 @@ const slides = [
     description:
       "Quality products that support our national industry. Inspired by Vision 2030.",
     buttonText: "Shop All Products",
-    imageUrl: "/hero2.png", // Replace with another image
+    imageUrl: "/hero2.png",
   },
   {
     id: 2,
     title: "Join the National Movement",
     description: "Discover how your business can contribute and benefit.",
     buttonText: "Learn How",
-    imageUrl: "/hero3.png", // Replace with another image
+    imageUrl: "/hero3.png",
   },
 ];
 
@@ -43,7 +40,6 @@ export default function CarouselHeroSection() {
         setLoaded(true);
       },
     },
-    // Add autoplay plugin
     [
       (slider) => {
         let timeout;
@@ -56,7 +52,7 @@ export default function CarouselHeroSection() {
           if (mouseOver) return;
           timeout = setTimeout(() => {
             slider.next();
-          }, 4000); // Change slide every 4 seconds
+          }, 4000);
         }
         slider.on("created", () => {
           slider.container.addEventListener("mouseover", () => {
@@ -89,11 +85,10 @@ export default function CarouselHeroSection() {
               backgroundPosition: "center",
             }}
           >
-            {/* Dark green overlay to ensure text is readable */}
             <div className='absolute inset-0 bg-brand-green/80'></div>
 
-            {/* Content */}
-            <div className='relative z-10 flex flex-col justify-center h-[550px] md:h-[500px] p-8 md:p-12 text-white text-left'>
+            {/* Removed fixed height (h-[550px]) and used padding (py-32) for flexible spacing */}
+            <div className='relative z-10 flex flex-col justify-center min-h-[400px] py-24 md:py-32 p-8 md:p-12 text-white text-left'>
               <div className='max-w-3xl'>
                 <h1 className='text-4xl font-extrabold tracking-tight md:text-5xl'>
                   {slide.title}
@@ -127,9 +122,7 @@ export default function CarouselHeroSection() {
                 }}
                 className={
                   "h-2 w-2 rounded-full transition-all duration-300 " +
-                  (currentSlide === idx
-                    ? "bg-white w-6" // Active dot
-                    : "bg-white/50") // Inactive dot
+                  (currentSlide === idx ? "bg-white w-6" : "bg-white/50")
                 }
               ></button>
             );

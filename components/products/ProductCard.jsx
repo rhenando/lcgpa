@@ -9,6 +9,17 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 export default function ProductCard({ product }) {
+  const factoryNames =
+    product.factories && product.factories.length > 0
+      ? product.factories.map((factory) => factory.name).join(", ")
+      : "Factory info not available";
+
+  const breadcrumbs = [
+    product.sectorName,
+    product.category,
+    product.subcategory,
+  ].filter(Boolean);
+
   return (
     <Card className='flex flex-col'>
       <CardHeader>
@@ -22,23 +33,39 @@ export default function ProductCard({ product }) {
         </div>
       </CardHeader>
       <CardContent className='flex-grow'>
+        {/* --- MODIFIED CATEGORY DISPLAY --- */}
+        <div className='mb-2 space-y-1 text-sm text-gray-600'>
+          {product.category && (
+            <p>
+              <span className='font-semibold text-gray-800'>Category:</span>{" "}
+              {product.category}
+            </p>
+          )}
+          {product.subcategory && (
+            <p>
+              <span className='font-semibold text-gray-800'>Subcategory:</span>{" "}
+              {product.subcategory}
+            </p>
+          )}
+        </div>
+        {/* --- END OF MODIFIED PART --- */}
         <CardTitle className='text-lg font-semibold'>{product.name}</CardTitle>
         <p className='text-sm text-gray-500'>
           Product Code: {product.productCode}
         </p>
         <p className='text-sm font-medium text-gray-700 mt-1'>
-          Sold by: {product.factoryName}
+          <span className='font-semibold'>Sold by:</span> {factoryNames}
         </p>
         <p className='mt-2 text-sm text-gray-600'>{product.definition}</p>
       </CardContent>
-      <CardFooter className='flex justify-between items-center'>
+      <CardFooter className='flex flex-col items-start gap-4'>
         <div>
           <p className='text-xl font-bold text-brand-green'>
-            SAR 0 - {product.priceCeiling}
+            0 - {product.priceCeiling} Pc/s
           </p>
-          <p className='text-xs text-gray-500'>Auctionable Range</p>
+          <p className='text-xs text-gray-500'>Aqustiable Range</p>
         </div>
-        <Button>Place Bid</Button>
+        <Button className='w-full'>Request a Quotation</Button>
       </CardFooter>
     </Card>
   );
