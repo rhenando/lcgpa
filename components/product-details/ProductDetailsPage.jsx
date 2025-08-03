@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations, useLocale } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,17 +10,14 @@ import { ArrowLeft, Share2, Heart, ShoppingCart } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function ProductDetailsPage({ product }) {
+  const t = useTranslations("ProductDetailsPage");
+  const locale = useLocale(); // Get the current locale ('en', 'ar', etc.)
   const router = useRouter();
 
-  // Use category and subcategory exactly as they are - don't clean them
   const breadcrumbs = [];
-
-  // Add category exactly as it is
   if (product.category) {
     breadcrumbs.push(product.category);
   }
-
-  // Add subcategory exactly as it is
   if (product.subcategory) {
     breadcrumbs.push(product.subcategory);
   }
@@ -28,8 +26,11 @@ export default function ProductDetailsPage({ product }) {
     <div className='container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8'>
       {/* Breadcrumb Navigation */}
       <nav className='flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6 overflow-x-auto'>
-        <Link href='/' className='hover:text-brand-green whitespace-nowrap'>
-          Home
+        <Link
+          href={`/${locale}`}
+          className='hover:text-brand-green whitespace-nowrap'
+        >
+          {t("home")}
         </Link>
         {breadcrumbs.map((crumb, index) => (
           <span key={index} className='flex items-center whitespace-nowrap'>
@@ -58,7 +59,7 @@ export default function ProductDetailsPage({ product }) {
         onClick={() => router.back()}
       >
         <ArrowLeft className='w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2' />
-        Back to Products
+        {t("backToProducts")}
       </Button>
 
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8'>
@@ -74,8 +75,6 @@ export default function ProductDetailsPage({ product }) {
               priority
             />
           </div>
-
-          {/* Additional Images (if available) */}
           {product.additionalImages && product.additionalImages.length > 0 && (
             <div className='grid grid-cols-3 sm:grid-cols-4 gap-2'>
               {product.additionalImages.map((img, index) => (
@@ -103,12 +102,11 @@ export default function ProductDetailsPage({ product }) {
               {product.name}
             </h1>
             <p className='text-sm sm:text-base lg:text-lg text-gray-600'>
-              Product Code:{" "}
+              {t("productCodeLabel")}{" "}
               <span className='font-medium'>{product.productCode}</span>
             </p>
           </div>
 
-          {/* Category Badges */}
           <div className='flex flex-wrap gap-1 sm:gap-2'>
             {breadcrumbs.map((crumb, index) => (
               <Badge key={index} variant='secondary' className='text-xs'>
@@ -117,24 +115,24 @@ export default function ProductDetailsPage({ product }) {
             ))}
           </div>
 
-          {/* Price Range */}
           <Card>
             <CardContent className='pt-4 sm:pt-6'>
               <div className='text-center'>
                 <p className='text-2xl sm:text-3xl font-bold text-brand-green mb-1'>
-                  0 - {product.priceCeiling} Pc/s
+                  {t("priceCeilingValue", { price: product.priceCeiling })}
                 </p>
                 <p className='text-xs sm:text-sm text-gray-500 capitalize'>
-                  {product.priceType} Range
+                  {t("priceTypeRange", { priceType: product.priceType })}
                 </p>
               </div>
             </CardContent>
           </Card>
 
-          {/* Supplier Information */}
           <Card>
             <CardHeader className='pb-3 sm:pb-4'>
-              <CardTitle className='text-base sm:text-lg'>Sold by</CardTitle>
+              <CardTitle className='text-base sm:text-lg'>
+                {t("soldBy")}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {product.factories && product.factories.length > 0 ? (
@@ -146,7 +144,7 @@ export default function ProductDetailsPage({ product }) {
                     >
                       <div className='flex-1'>
                         <Link
-                          href={`/supplier/${factory.id}`}
+                          href={`/${locale}/supplier/${factory.id}`}
                           className='text-brand-green hover:underline font-medium text-sm sm:text-base'
                         >
                           {factory.name}
@@ -176,14 +174,14 @@ export default function ProductDetailsPage({ product }) {
                                 : "bg-gray-100 text-gray-600"
                             }`}
                           >
-                            {factory.hasBaseLine
-                              ? "Has Baseline"
-                              : "No Baseline"}
+                            {t(
+                              factory.hasBaseLine ? "hasBaseline" : "noBaseline"
+                            )}
                           </span>
                         </div>
                       </div>
                       <Link
-                        href={`/supplier/${factory.id}`}
+                        href={`/${locale}/supplier/${factory.id}`}
                         className='self-start sm:self-center'
                       >
                         <Button
@@ -191,7 +189,7 @@ export default function ProductDetailsPage({ product }) {
                           variant='outline'
                           className='text-xs sm:text-sm'
                         >
-                          View Supplier
+                          {t("viewSupplier")}
                         </Button>
                       </Link>
                     </div>
@@ -199,64 +197,61 @@ export default function ProductDetailsPage({ product }) {
                 </div>
               ) : (
                 <p className='text-gray-500 text-sm'>
-                  Factory information not available
+                  {t("factoryInfoNotAvailable")}
                 </p>
               )}
             </CardContent>
           </Card>
 
-          {/* Action Buttons */}
           <div className='space-y-3'>
             <Button className='w-full text-sm sm:text-base' size='lg'>
               <ShoppingCart className='w-4 h-4 mr-2' />
-              Request a Quotation
+              {t("requestQuotation")}
             </Button>
             <div className='flex gap-2 sm:gap-3'>
               <Button variant='outline' className='flex-1 text-xs sm:text-sm'>
                 <Heart className='w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2' />
-                <span className='hidden sm:inline'>Add to Wishlist</span>
-                <span className='sm:hidden'>Wishlist</span>
+                <span className='hidden sm:inline'>{t("addToWishlist")}</span>
+                <span className='sm:hidden'>{t("wishlist")}</span>
               </Button>
               <Button variant='outline' className='flex-1 text-xs sm:text-sm'>
                 <Share2 className='w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2' />
-                <span className='hidden sm:inline'>Share Product</span>
-                <span className='sm:hidden'>Share</span>
+                <span className='hidden sm:inline'>{t("shareProduct")}</span>
+                <span className='sm:hidden'>{t("share")}</span>
               </Button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Product Description */}
       <div className='grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8'>
         <div className='lg:col-span-2 space-y-4 sm:space-y-6'>
           <Card>
             <CardHeader className='pb-3 sm:pb-4'>
               <CardTitle className='text-base sm:text-lg'>
-                Product Description
+                {t("productDescriptionTitle")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className='text-gray-700 leading-relaxed text-sm sm:text-base'>
                 {product.definition ||
                   product.description ||
-                  "No description available for this product."}
+                  t("noDescription")}
               </p>
             </CardContent>
           </Card>
 
-          {/* Product Information */}
           <Card>
             <CardHeader className='pb-3 sm:pb-4'>
               <CardTitle className='text-base sm:text-lg'>
-                Product Information
+                {t("productInformationTitle")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className='grid grid-cols-1 gap-3 sm:gap-4'>
                 <div className='flex flex-col sm:flex-row sm:justify-between py-2 border-b border-gray-100 gap-1 sm:gap-0'>
                   <span className='font-medium text-gray-600 text-sm sm:text-base'>
-                    Product Code:
+                    {t("productCodeLabel")}
                   </span>
                   <span className='text-gray-900 text-sm sm:text-base'>
                     {product.productCode}
@@ -264,7 +259,7 @@ export default function ProductDetailsPage({ product }) {
                 </div>
                 <div className='flex flex-col sm:flex-row sm:justify-between py-2 border-b border-gray-100 gap-1 sm:gap-0'>
                   <span className='font-medium text-gray-600 text-sm sm:text-base'>
-                    Sector Code:
+                    {t("sectorCodeLabel")}
                   </span>
                   <span className='text-gray-900 text-sm sm:text-base'>
                     {product.sectorCode}
@@ -272,7 +267,7 @@ export default function ProductDetailsPage({ product }) {
                 </div>
                 <div className='flex flex-col sm:flex-row sm:justify-between py-2 border-b border-gray-100 gap-1 sm:gap-0'>
                   <span className='font-medium text-gray-600 text-sm sm:text-base'>
-                    Sector:
+                    {t("sectorLabel")}
                   </span>
                   <span className='text-gray-900 text-sm sm:text-base'>
                     {product.sectorName}
@@ -280,7 +275,7 @@ export default function ProductDetailsPage({ product }) {
                 </div>
                 <div className='flex flex-col sm:flex-row sm:justify-between py-2 border-b border-gray-100 gap-1 sm:gap-0'>
                   <span className='font-medium text-gray-600 text-sm sm:text-base'>
-                    Price Type:
+                    {t("priceTypeLabel")}
                   </span>
                   <span className='text-gray-900 capitalize text-sm sm:text-base'>
                     {product.priceType}
@@ -288,16 +283,16 @@ export default function ProductDetailsPage({ product }) {
                 </div>
                 <div className='flex flex-col sm:flex-row sm:justify-between py-2 border-b border-gray-100 gap-1 sm:gap-0'>
                   <span className='font-medium text-gray-600 text-sm sm:text-base'>
-                    Price Ceiling:
+                    {t("priceCeilingLabel")}
                   </span>
                   <span className='text-gray-900 text-sm sm:text-base'>
-                    {product.priceCeiling} Pc/s
+                    {t("pcs", { count: product.priceCeiling })}
                   </span>
                 </div>
                 {product.localContentCertificate && (
                   <div className='flex flex-col sm:flex-row sm:justify-between py-2 gap-1 sm:gap-0'>
                     <span className='font-medium text-gray-600 text-sm sm:text-base'>
-                      Local Content Certificate:
+                      {t("localContentCertificateLabel")}
                     </span>
                     <span className='text-gray-900 text-sm sm:text-base'>
                       {product.localContentCertificate}
@@ -309,63 +304,63 @@ export default function ProductDetailsPage({ product }) {
           </Card>
         </div>
 
-        {/* Sidebar */}
         <div className='space-y-4 sm:space-y-6'>
-          {/* Quick Contact */}
           <Card>
             <CardHeader className='pb-3 sm:pb-4'>
-              <CardTitle className='text-base sm:text-lg'>Need Help?</CardTitle>
+              <CardTitle className='text-base sm:text-lg'>
+                {t("needHelp")}
+              </CardTitle>
             </CardHeader>
             <CardContent className='space-y-3'>
               <Button variant='outline' className='w-full text-sm'>
-                Contact Supplier
+                {t("contactSupplier")}
               </Button>
               <Button variant='outline' className='w-full text-sm'>
-                Live Chat Support
+                {t("liveChatSupport")}
               </Button>
               <p className='text-xs sm:text-sm text-gray-500 text-center'>
-                Get instant answers to your questions
+                {t("instantAnswers")}
               </p>
             </CardContent>
           </Card>
 
-          {/* Delivery Information */}
           <Card>
             <CardHeader className='pb-3 sm:pb-4'>
               <CardTitle className='text-base sm:text-lg'>
-                Delivery Info
+                {t("deliveryInfo")}
               </CardTitle>
             </CardHeader>
             <CardContent className='space-y-2 text-xs sm:text-sm'>
               <div className='flex justify-between items-start'>
-                <span className='text-gray-600'>Price Type:</span>
+                <span className='text-gray-600'>{t("priceTypeLabel")}</span>
                 <span className='font-medium capitalize text-right'>
                   {product.priceType}
                 </span>
               </div>
               <div className='flex justify-between items-start'>
-                <span className='text-gray-600'>Suppliers:</span>
+                <span className='text-gray-600'>{t("suppliersLabel")}</span>
                 <span className='font-medium text-right'>
-                  {product.factories?.length || 0} available
+                  {t("suppliersAvailable", {
+                    count: product.factories?.length || 0,
+                  })}
                 </span>
               </div>
               <div className='flex justify-between items-start'>
-                <span className='text-gray-600'>Local Content:</span>
+                <span className='text-gray-600'>{t("localContentLabel")}</span>
                 <span className='font-medium text-brand-green text-right'>
-                  {product.localContentCertificate
-                    ? "Required"
-                    : "Not Required"}
+                  {t(
+                    product.localContentCertificate ? "required" : "notRequired"
+                  )}
                 </span>
               </div>
             </CardContent>
           </Card>
 
-          {/* Related Categories */}
           {breadcrumbs.length > 0 && (
             <Card>
               <CardHeader className='pb-3 sm:pb-4'>
                 <CardTitle className='text-base sm:text-lg'>
-                  Related Categories
+                  {t("relatedCategories")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -373,12 +368,12 @@ export default function ProductDetailsPage({ product }) {
                   {breadcrumbs.map((crumb, index) => (
                     <Link
                       key={index}
-                      href={`/category/${crumb
+                      href={`/${locale}/category/${crumb
                         .toLowerCase()
                         .replace(/\s+/g, "-")}`}
                       className='block text-xs sm:text-sm text-brand-green hover:underline'
                     >
-                      Browse all in {crumb}
+                      {t("browseAllInCategory", { category: crumb })}
                     </Link>
                   ))}
                 </div>

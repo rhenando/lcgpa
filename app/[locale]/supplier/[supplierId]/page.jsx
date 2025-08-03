@@ -12,19 +12,32 @@ import {
   FileText,
 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
-// 1. Import your mock data. Adjust the path if necessary.
+import { useTranslations, useLocale } from "next-intl";
+import { Link } from "../../../../i18n/routing";
 import { featuredProducts } from "@/lib/mock-data";
 
-// 2. This function now dynamically finds the supplier and their products.
-const getSupplierData = async (supplierId) => {
+// Dynamic data loading function
+const getSupplierData = async (supplierId, locale) => {
   let supplierInfo = null;
   const supplierProducts = [];
 
+  // Load appropriate mock data based on locale
+  let localizedProducts = featuredProducts;
+  if (locale === "ar") {
+    try {
+      const { featuredProducts: arabicProducts } = await import(
+        "@/lib/mock-data-ar"
+      );
+      localizedProducts = arabicProducts;
+    } catch (error) {
+      console.log("Arabic mock data not found, using default");
+    }
+  }
+
   // Find the factory details and all associated products
-  for (const product of featuredProducts) {
+  for (const product of localizedProducts) {
     // Find the specific factory from the product's list
-    const factory = product.factories.find((f) => f.id === supplierId);
+    const factory = product.factories?.find((f) => f.id === supplierId);
 
     // If we find the factory and haven't stored its main details yet, save them.
     if (factory && !supplierInfo) {
@@ -35,30 +48,41 @@ const getSupplierData = async (supplierId) => {
           0,
           2
         )}`,
-        isVerified: true, // Default value
+        isVerified: true,
         location: factory.address,
-        website: `https://www.${factory.id}.com`, // Placeholder website
+        website: `https://www.${factory.id}.com`,
         email: factory.email,
         phone: factory.contactNumber,
-        about: `Detailed information about ${factory.name}. As a leading manufacturer in the region, we are committed to delivering high-quality products and innovative solutions to our partners worldwide. Our state-of-the-art facilities and dedicated team ensure excellence at every stage of production.`, // Placeholder about text
+        about:
+          locale === "ar"
+            ? `معلومات مفصلة عن ${factory.name}. كشركة رائدة في التصنيع في المنطقة، نحن ملتزمون بتقديم منتجات عالية الجودة وحلول مبتكرة لشركائنا في جميع أنحاء العالم. مرافقنا الحديثة وفريقنا المتفاني يضمنان التميز في كل مرحلة من مراحل الإنتاج.`
+            : `Detailed information about ${factory.name}. As a leading manufacturer in the region, we are committed to delivering high-quality products and innovative solutions to our partners worldwide. Our state-of-the-art facilities and dedicated team ensure excellence at every stage of production.`,
         companyDetails: {
-          // Placeholder details
           yearEstablished: "2005",
           employees: "200+",
-          businessType: "Manufacturer, Exporter",
+          businessType:
+            locale === "ar" ? "مصنع، مصدر" : "Manufacturer, Exporter",
         },
         certificates: [
-          // Placeholder certificates
           {
             id: "cert-1",
             name: "ISO 9001:2015",
-            description: "Quality Management System",
+            description:
+              locale === "ar"
+                ? "نظام إدارة الجودة"
+                : "Quality Management System",
             fileUrl: "#",
           },
           {
             id: "cert-2",
-            name: "Regional Compliance Certificate",
-            description: "Meets all local and regional standards",
+            name:
+              locale === "ar"
+                ? "شهادة الامتثال الإقليمي"
+                : "Regional Compliance Certificate",
+            description:
+              locale === "ar"
+                ? "يلبي جميع المعايير المحلية والإقليمية"
+                : "Meets all local and regional standards",
             fileUrl: "#",
           },
         ],
@@ -66,7 +90,7 @@ const getSupplierData = async (supplierId) => {
     }
 
     // If this product is made by the supplier, add it to their product list.
-    const isProductBySupplier = product.factories.some(
+    const isProductBySupplier = product.factories?.some(
       (f) => f.id === supplierId
     );
     if (isProductBySupplier) {
@@ -74,21 +98,18 @@ const getSupplierData = async (supplierId) => {
     }
   }
 
-  // If no supplier was found with that ID, return null.
   if (!supplierInfo) {
     return null;
   }
 
-  // Return the complete supplier profile
   return {
     ...supplierInfo,
     products: supplierProducts,
   };
 };
 
-// This is a placeholder for your ProductCard component
-// In your actual app, you would import your existing ProductCard
-const ProductCard = ({ product }) => (
+// Localized ProductCard component
+const ProductCard = ({ product, locale, t }) => (
   <Card className='flex flex-col h-full'>
     <CardHeader className='p-0'>
       <div className='relative aspect-square w-full overflow-hidden rounded-t-md'>
@@ -101,11 +122,18 @@ const ProductCard = ({ product }) => (
         />
       </div>
     </CardHeader>
-    <CardContent className='p-4 flex-grow'>
+    <CardContent
+      className={`p-4 flex-grow ${
+        locale === "ar" ? "text-right" : "text-left"
+      }`}
+    >
       <CardTitle className='text-base font-semibold line-clamp-1'>
         {product.name}
       </CardTitle>
-      <p className='text-sm text-gray-500'>Code: {product.productCode}</p>
+      <p className='text-sm text-gray-500'>
+        {t("productCode") || (locale === "ar" ? "كود" : "Code")}:{" "}
+        {product.productCode}
+      </p>
       <p className='mt-2 text-sm text-gray-600 line-clamp-2'>
         {product.definition}
       </p>
@@ -116,30 +144,63 @@ const ProductCard = ({ product }) => (
         variant='outline'
         className='w-full border-brand-green text-brand-green hover:bg-brand-green hover:text-white transition-colors'
       >
-        <Link href={`/product/${product.id}`}>View Details</Link>
+        <Link href={`/product/${product.id}`}>
+          {t("viewDetails") ||
+            (locale === "ar" ? "عرض التفاصيل" : "View Details")}
+        </Link>
       </Button>
     </div>
   </Card>
 );
 
 export default async function SupplierProfilePage({ params }) {
-  // Fix: Await params before accessing its properties
-  const { supplierId } = await params;
-  const supplier = await getSupplierData(supplierId);
+  const { locale, supplierId } = await params;
+  const supplier = await getSupplierData(supplierId, locale);
 
-  // 3. Handle the case where no supplier is found
+  const isRTL = locale === "ar";
+
+  // Static translations with fallbacks
+  const translations = {
+    supplierNotFound:
+      locale === "ar" ? "المورد غير موجود" : "Supplier Not Found",
+    supplierNotFoundDesc:
+      locale === "ar"
+        ? "المورد الذي تبحث عنه غير موجود."
+        : "The supplier you are looking for does not exist.",
+    goBackHome:
+      locale === "ar" ? "العودة للصفحة الرئيسية" : "Go Back to Homepage",
+    verifiedSupplier: locale === "ar" ? "مورد معتمد" : "Verified Supplier",
+    contactInformation:
+      locale === "ar" ? "معلومات الاتصال" : "Contact Information",
+    sendInquiry: locale === "ar" ? "إرسال استفسار" : "Send an Inquiry",
+    requestQuotation: locale === "ar" ? "طلب عرض سعر" : "Request a Quotation",
+    aboutUs: locale === "ar" ? "معلومات عنا" : "About Us",
+    products: locale === "ar" ? "المنتجات" : "Products",
+    certificates: locale === "ar" ? "الشهادات" : "Certificates",
+    companyOverview:
+      locale === "ar" ? "نظرة عامة على الشركة" : "Company Overview",
+    companyDetails: locale === "ar" ? "تفاصيل الشركة" : "Company Details",
+    yearEstablished: locale === "ar" ? "سنة التأسيس:" : "Year Established:",
+    businessType: locale === "ar" ? "نوع النشاط:" : "Business Type:",
+    numberOfEmployees:
+      locale === "ar" ? "عدد الموظفين:" : "Number of Employees:",
+    view: locale === "ar" ? "عرض" : "View",
+    productCode: locale === "ar" ? "كود" : "Code",
+    viewDetails: locale === "ar" ? "عرض التفاصيل" : "View Details",
+  };
+
   if (!supplier) {
     return (
       <div className='flex items-center justify-center h-screen bg-gray-50'>
-        <div className='text-center'>
+        <div className={`text-center ${isRTL ? "text-right" : "text-left"}`}>
           <h1 className='text-2xl font-bold text-gray-800'>
-            Supplier Not Found
+            {translations.supplierNotFound}
           </h1>
           <p className='text-gray-600 mt-2'>
-            The supplier you are looking for does not exist.
+            {translations.supplierNotFoundDesc}
           </p>
           <Button asChild className='mt-4'>
-            <Link href='/'>Go Back to Homepage</Link>
+            <Link href='/'>{translations.goBackHome}</Link>
           </Button>
         </div>
       </div>
@@ -147,11 +208,15 @@ export default async function SupplierProfilePage({ params }) {
   }
 
   return (
-    <div className='bg-gray-50 min-h-screen'>
+    <div className='bg-gray-50 min-h-screen' dir={isRTL ? "rtl" : "ltr"}>
       <div className='container mx-auto p-4 md:p-8'>
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
           {/* Left Column */}
-          <div className='lg:col-span-1 space-y-6'>
+          <div
+            className={`lg:col-span-1 space-y-6 ${
+              isRTL ? "lg:order-2" : "lg:order-1"
+            }`}
+          >
             <Card>
               <CardContent className='p-6 flex flex-col items-center text-center'>
                 <Avatar className='w-24 h-24 mb-4 border-4 border-white shadow-md'>
@@ -166,10 +231,14 @@ export default async function SupplierProfilePage({ params }) {
                 {supplier.isVerified && (
                   <Badge
                     variant='secondary'
-                    className='mt-2 bg-green-100 text-brand-green border border-green-200'
+                    className={`mt-2 bg-green-100 text-brand-green border border-green-200 ${
+                      isRTL ? "flex-row-reverse" : ""
+                    }`}
                   >
-                    <CheckCircle className='w-4 h-4 mr-1.5' />
-                    Verified Supplier
+                    <CheckCircle
+                      className={`w-4 h-4 ${isRTL ? "ml-1.5" : "mr-1.5"}`}
+                    />
+                    {translations.verifiedSupplier}
                   </Badge>
                 )}
               </CardContent>
@@ -177,14 +246,30 @@ export default async function SupplierProfilePage({ params }) {
 
             <Card>
               <CardHeader>
-                <CardTitle className='text-lg'>Contact Information</CardTitle>
+                <CardTitle
+                  className={`text-lg ${isRTL ? "text-right" : "text-left"}`}
+                >
+                  {translations.contactInformation}
+                </CardTitle>
               </CardHeader>
-              <CardContent className='space-y-4 text-sm'>
-                <div className='flex items-start gap-3'>
+              <CardContent
+                className={`space-y-4 text-sm ${
+                  isRTL ? "text-right" : "text-left"
+                }`}
+              >
+                <div
+                  className={`flex items-start gap-3 ${
+                    isRTL ? "flex-row-reverse" : ""
+                  }`}
+                >
                   <MapPin className='w-5 h-5 text-gray-400 mt-0.5' />
                   <span className='text-gray-700'>{supplier.location}</span>
                 </div>
-                <div className='flex items-center gap-3'>
+                <div
+                  className={`flex items-center gap-3 ${
+                    isRTL ? "flex-row-reverse" : ""
+                  }`}
+                >
                   <Globe className='w-5 h-5 text-gray-400' />
                   <a
                     href={supplier.website}
@@ -195,16 +280,24 @@ export default async function SupplierProfilePage({ params }) {
                     {supplier.website}
                   </a>
                 </div>
-                <div className='flex items-center gap-3'>
+                <div
+                  className={`flex items-center gap-3 ${
+                    isRTL ? "flex-row-reverse" : ""
+                  }`}
+                >
                   <Mail className='w-5 h-5 text-gray-400' />
                   <a
                     href={`mailto:${supplier.email}`}
                     className='text-brand-green hover:underline'
                   >
-                    Send an Inquiry
+                    {translations.sendInquiry}
                   </a>
                 </div>
-                <div className='flex items-center gap-3'>
+                <div
+                  className={`flex items-center gap-3 ${
+                    isRTL ? "flex-row-reverse" : ""
+                  }`}
+                >
                   <Phone className='w-5 h-5 text-gray-400' />
                   <span className='text-gray-700'>{supplier.phone}</span>
                 </div>
@@ -213,26 +306,40 @@ export default async function SupplierProfilePage({ params }) {
 
             <div className='p-4 bg-white rounded-lg shadow-sm'>
               <Button className='w-full bg-brand-green hover:bg-opacity-90'>
-                Request a Quotation
+                {translations.requestQuotation}
               </Button>
             </div>
           </div>
 
           {/* Right Column */}
-          <div className='lg:col-span-2'>
-            <Tabs defaultValue='about' className='w-full'>
+          <div
+            className={`lg:col-span-2 ${isRTL ? "lg:order-1" : "lg:order-2"}`}
+          >
+            <Tabs
+              defaultValue='about'
+              className='w-full'
+              dir={isRTL ? "rtl" : "ltr"}
+            >
               <TabsList className='grid w-full grid-cols-3 bg-gray-200'>
-                <TabsTrigger value='about'>About Us</TabsTrigger>
-                <TabsTrigger value='products'>Products</TabsTrigger>
-                <TabsTrigger value='certificates'>Certificates</TabsTrigger>
+                <TabsTrigger value='about'>{translations.aboutUs}</TabsTrigger>
+                <TabsTrigger value='products'>
+                  {translations.products}
+                </TabsTrigger>
+                <TabsTrigger value='certificates'>
+                  {translations.certificates}
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value='about' className='mt-6'>
                 <Card>
-                  <CardContent className='p-6 space-y-6'>
+                  <CardContent
+                    className={`p-6 space-y-6 ${
+                      isRTL ? "text-right" : "text-left"
+                    }`}
+                  >
                     <div>
                       <h3 className='text-lg font-semibold text-gray-800'>
-                        Company Overview
+                        {translations.companyOverview}
                       </h3>
                       <p className='mt-2 text-gray-600 leading-relaxed'>
                         {supplier.about}
@@ -240,24 +347,46 @@ export default async function SupplierProfilePage({ params }) {
                     </div>
                     <div className='border-t border-gray-200 pt-6'>
                       <h3 className='text-lg font-semibold text-gray-800'>
-                        Company Details
+                        {translations.companyDetails}
                       </h3>
                       <dl className='mt-4 grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 text-sm'>
-                        <div className='flex justify-between'>
-                          <dt className='text-gray-500'>Year Established:</dt>
+                        <div
+                          className={`flex ${
+                            isRTL
+                              ? "justify-between flex-row-reverse"
+                              : "justify-between"
+                          }`}
+                        >
+                          <dt className='text-gray-500'>
+                            {translations.yearEstablished}
+                          </dt>
                           <dd className='text-gray-800 font-medium'>
                             {supplier.companyDetails.yearEstablished}
                           </dd>
                         </div>
-                        <div className='flex justify-between'>
-                          <dt className='text-gray-500'>Business Type:</dt>
+                        <div
+                          className={`flex ${
+                            isRTL
+                              ? "justify-between flex-row-reverse"
+                              : "justify-between"
+                          }`}
+                        >
+                          <dt className='text-gray-500'>
+                            {translations.businessType}
+                          </dt>
                           <dd className='text-gray-800 font-medium'>
                             {supplier.companyDetails.businessType}
                           </dd>
                         </div>
-                        <div className='flex justify-between'>
+                        <div
+                          className={`flex ${
+                            isRTL
+                              ? "justify-between flex-row-reverse"
+                              : "justify-between"
+                          }`}
+                        >
                           <dt className='text-gray-500'>
-                            Number of Employees:
+                            {translations.numberOfEmployees}
                           </dt>
                           <dd className='text-gray-800 font-medium'>
                             {supplier.companyDetails.employees}
@@ -272,7 +401,12 @@ export default async function SupplierProfilePage({ params }) {
               <TabsContent value='products' className='mt-6'>
                 <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6'>
                   {supplier.products.map((product) => (
-                    <ProductCard key={product.id} product={product} />
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      locale={locale}
+                      t={(key) => translations[key]}
+                    />
                   ))}
                 </div>
               </TabsContent>
@@ -283,9 +417,15 @@ export default async function SupplierProfilePage({ params }) {
                     {supplier.certificates.map((cert) => (
                       <div
                         key={cert.id}
-                        className='flex items-center justify-between p-3 bg-gray-50 rounded-lg border'
+                        className={`flex items-center justify-between p-3 bg-gray-50 rounded-lg border ${
+                          isRTL ? "flex-row-reverse" : ""
+                        }`}
                       >
-                        <div className='flex items-center gap-4'>
+                        <div
+                          className={`flex items-center gap-4 ${
+                            isRTL ? "flex-row-reverse text-right" : "text-left"
+                          }`}
+                        >
                           <FileText className='w-6 h-6 text-brand-green' />
                           <div>
                             <p className='font-semibold text-gray-800'>
@@ -302,7 +442,7 @@ export default async function SupplierProfilePage({ params }) {
                             target='_blank'
                             rel='noopener noreferrer'
                           >
-                            View
+                            {translations.view}
                           </a>
                         </Button>
                       </div>
