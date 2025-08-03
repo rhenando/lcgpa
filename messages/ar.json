@@ -153,5 +153,18 @@
     "productCode": "Code: {code}",
     "viewDetails": "View Details",
     "viewCertificate": "View"
+  },
+  "NegotiationChat": {
+    "pageTitle": "صفحة التفاوض",
+    "title": "تفاوض مع {factory}",
+    "description": "ناقش الشروط والأسعار مباشرة مع المورد.",
+    "negotiablePrice": "السعر قابل للتفاوض",
+    "placeholder": "اكتب رسالتك...",
+    "price": "{price, number, ::currency/SAR}",
+    "productDetails": "تفاصيل المنتج",
+    "productCode": "رمز المنتج",
+    "sector": "القطاع",
+    "category": "الفئة",
+    "descriptionTitle": "الوصف"
   }
 }

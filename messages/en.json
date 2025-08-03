@@ -138,5 +138,18 @@
     "notRequired": "Not Required",
     "relatedCategories": "Related Categories",
     "browseAllInCategory": "Browse all in {category}"
+  },
+  "NegotiationChat": {
+    "pageTitle": "Negotiation",
+    "title": "Negotiate with {factory}",
+    "description": "Discuss terms and pricing in real-time with the supplier.",
+    "negotiablePrice": "Negotiable Price",
+    "placeholder": "Type your message...",
+    "price": "{price, number, ::currency/SAR}",
+    "productDetails": "Product Details",
+    "productCode": "Product Code",
+    "sector": "Sector",
+    "category": "Category",
+    "descriptionTitle": "Description"
   }
 }

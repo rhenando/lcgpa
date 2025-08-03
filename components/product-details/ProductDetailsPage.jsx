@@ -9,9 +9,11 @@ import Link from "next/link";
 import { ArrowLeft, Share2, Heart, ShoppingCart } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+// The state, handlers, and chat component import have been removed as they are no longer needed for the "new page" approach.
+
 export default function ProductDetailsPage({ product }) {
   const t = useTranslations("ProductDetailsPage");
-  const locale = useLocale(); // Get the current locale ('en', 'ar', etc.)
+  const locale = useLocale();
   const router = useRouter();
 
   const breadcrumbs = [];
@@ -24,7 +26,6 @@ export default function ProductDetailsPage({ product }) {
 
   return (
     <div className='container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8'>
-      {/* Breadcrumb Navigation */}
       <nav className='flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6 overflow-x-auto'>
         <Link
           href={`/${locale}`}
@@ -52,7 +53,6 @@ export default function ProductDetailsPage({ product }) {
         </span>
       </nav>
 
-      {/* Back Button */}
       <Button
         variant='ghost'
         className='mb-4 sm:mb-6 p-0 h-auto font-normal text-sm sm:text-base text-gray-600 hover:text-brand-green'
@@ -63,7 +63,6 @@ export default function ProductDetailsPage({ product }) {
       </Button>
 
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8'>
-        {/* Product Images */}
         <div className='space-y-3 sm:space-y-4'>
           <div className='relative aspect-square w-full overflow-hidden rounded-lg border'>
             <Image
@@ -94,8 +93,6 @@ export default function ProductDetailsPage({ product }) {
             </div>
           )}
         </div>
-
-        {/* Product Information */}
         <div className='space-y-4 sm:space-y-6'>
           <div>
             <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2 leading-tight'>
@@ -312,9 +309,34 @@ export default function ProductDetailsPage({ product }) {
               </CardTitle>
             </CardHeader>
             <CardContent className='space-y-3'>
-              <Button variant='outline' className='w-full text-sm'>
-                {t("contactSupplier")}
-              </Button>
+              <Link
+                href={`/${locale}/negotiate/${product.id}/${product.factories[0]?.id}`}
+                target='_blank'
+                rel='noopener noreferrer'
+                className={
+                  !product.factories || product.factories.length === 0
+                    ? "pointer-events-none"
+                    : ""
+                }
+                aria-disabled={
+                  !product.factories || product.factories.length === 0
+                }
+                tabIndex={
+                  !product.factories || product.factories.length === 0
+                    ? -1
+                    : undefined
+                }
+              >
+                <Button
+                  variant='outline'
+                  className='w-full text-sm'
+                  disabled={
+                    !product.factories || product.factories.length === 0
+                  }
+                >
+                  {t("contactSupplier")}
+                </Button>
+              </Link>
               <Button variant='outline' className='w-full text-sm'>
                 {t("liveChatSupport")}
               </Button>
