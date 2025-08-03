@@ -329,7 +329,7 @@ export default function ProductDetailsPage({ product }) {
               >
                 <Button
                   variant='outline'
-                  className='w-full text-sm'
+                  className='w-full text-sm mb-2'
                   disabled={
                     !product.factories || product.factories.length === 0
                   }
